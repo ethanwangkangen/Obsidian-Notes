@@ -1,0 +1,59 @@
+
+move 0x0 into address at \[esp+0x5c]
+- assuming this is some variable
+
+- \[ebp+0xc] is the address of argv
+- **IMPORTANT**
+	- remember what argv is - argv is an array of strings.
+- x/wx $ebp+0xc
+	- 0xbffff814: 0xbffff8b4
+	- this means that 0xbffff814 is the calculated address of ebp+0xc
+	- 0xbffff8b4 is what's stored at that address, and what is moved into eax.
+- eax now stores 0xbffff8b4
+	- then add 0x4
+	- eax now stores 0xbffff8b8
+
+
+
+Stack
+
+| Higher address |                             |                         | Contents   |     | Comments                                                                                                                       |
+| -------------- | --------------------------- | ----------------------- | ---------- | --- | ------------------------------------------------------------------------------------------------------------------------------ |
+| 0xbffff9ce     | "/opt/protostar/bin/stack1" |                         |            |     | actual string                                                                                                                  |
+| 0xbffff9e8     | "hello"                     |                         |            |     | the atual string                                                                                                               |
+|                | ...                         |                         |            |     |                                                                                                                                |
+| 0xbffff8b4     | argv\[0]                    | address of program name | 0xbffff9ce |     | the array, holding address of the string                                                                                       |
+| 0xbffff8b8     | argv\[1]                    | address of "hello"      | 0xbffff9e8 |     | the array, holding address of the string                                                                                       |
+|                | ...                         |                         |            |     |                                                                                                                                |
+|                | ...                         |                         |            |     |                                                                                                                                |
+|                | .                           |                         |            |     |                                                                                                                                |
+|                | .                           |                         |            |     |                                                                                                                                |
+| 0xbffff814     | argv                        | address of argv\[0]     | 0xbffff8b4 |     | address of the array                                                                                                           |
+|                | argc                        |                         | 2          |     |                                                                                                                                |
+|                | return address              |                         |            |     | want to modify this!                                                                                                           |
+|                | (old) base pointer          |                         |            | ebp |                                                                                                                                |
+|                | ..local variables           |                         |            |     | including buffers. stored at lower address, but writes to higher address as buffer grows. (eventually reaching return pointer) |
+|                |                             |                         |            | esp |                                                                                                                                |
+Explanation:
+- argv and argc are arguments that are passed to the functions
+	- in 64 bit architecture, instead of these being passed to function by pushing on the stack, they are passed through registers.
+		- so u wont see argv and argc above the return address
+- the actual argv array is simply an array of addresses
+	- argv\[0] stores the address of the program name string
+	- argv\[1] stores the address of the first argument passed to the function and so on
+
+mov eax, DWORD PTR \[ebp+0xc]
+add eax, 0x4
+mov eax, DWORD PTR \[eax]
+- move address of argv\[0] into eax, then add 4 to get address of argv\[1], then dereference to get arv\[1], which is address of the "hello" string.
+- then move that into eax.
+
+move DWORD PTR \[esp+0x4], eax
+- then move the string address into some variable at \[esp+0x4]
+- possibly as argument for strcpy
+
+lea eax, \[esp + 0x1c]
+mov DWORD PTR \[esp], eax
+- load address of buffer, which is \[esp+0x1c], as argument for strcpy
+
+From the above 2 chunks, essentially copies the argument to the program into the buffer that starts at \[esp+0x1c]

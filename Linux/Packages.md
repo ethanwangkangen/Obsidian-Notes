@@ -1,0 +1,4 @@
+- Software is submitted to an apt repository
+- Can add community repositories with
+	- add-apt-repository
+- 
