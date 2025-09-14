@@ -2,7 +2,7 @@
 
 **netcat**
 - [[Socket programming]]
-- `netcat port ip`
+- `nc -p <source port> <destination ip> <destination port>`
 - `nc -lvnp 4444 > saved_here.txt` 
 	- run this on local
 	- start a listener on port 4444
