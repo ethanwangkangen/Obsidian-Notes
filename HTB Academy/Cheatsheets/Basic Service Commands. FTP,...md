@@ -88,3 +88,22 @@ RPC Commands
 - ie.
 	- rpcclient -U "" 10.129.14.128
 	- srvinfo
+
+# DNS
+
+| Protocol / Tool                  | Command / Syntax                 | Purpose / Notes                                                                                             |
+| -------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `dig`                            | `dig example.com`                | Query default DNS resolver for `example.com`.                                                               |
+| `dig`                            | `dig example.com @<DNS_IP>`      | Query a **specific DNS server** directly at `<DNS_IP>`. Useful for internal network enumeration.            |
+| `dig`                            | `dig NS example.com @<DNS_IP>`   | List authoritative name servers (NS records) for a domain.                                                  |
+| `dig`                            | `dig AXFR example.com @<DNS_IP>` | Attempt **zone transfer** from the DNS server to get all records for the domain. Only works if allowed.     |
+| `dig`                            | `dig ANY example.com @<DNS_IP>`  | Query all available record types that the server will disclose.                                             |
+| `dig`                            | `dig +trace example.com`         | Show full recursive resolution path from root servers down to authoritative server.                         |
+| `nslookup`                       | `nslookup example.com`           | Query DNS (default resolver) for a domain.                                                                  |
+| `nslookup`                       | `nslookup example.com <DNS_IP>`  | Query a specific DNS server directly.                                                                       |
+| `host`                           | `host example.com`               | Simple command to resolve a hostname to an IP using default DNS.                                            |
+| `host`                           | `host example.com <DNS_IP>`      | Query a specific DNS server directly.                                                                       |
+| `resolvectl` / `systemd-resolve` | `resolvectl query example.com`   | Query DNS using systemd-resolved.                                                                           |
+| `resolvectl` / `systemd-resolve` | `resolvectl status`              | Show the DNS servers being used by the system.                                                              |
+| System file                      | `/etc/resolv.conf`               | Shows configured DNS resolvers. `nameserver 127.0.0.53` indicates local stub resolver via systemd-resolved. |
+| `tcpdump`                        | `sudo tcpdump -i any port 53`    | Capture DNS traffic on port 53 to observe queries and responses.                                            |
