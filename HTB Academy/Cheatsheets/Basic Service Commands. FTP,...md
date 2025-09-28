@@ -108,6 +108,28 @@ RPC Commands
 | System file                      | `/etc/resolv.conf`               | Shows configured DNS resolvers. `nameserver 127.0.0.53` indicates local stub resolver via systemd-resolved. |
 | `tcpdump`                        | `sudo tcpdump -i any port 53`    | Capture DNS traffic on port 53 to observe queries and responses.                                            |
 
+# SMTP
+
+
+| protocol / tool        | command / syntax                                  | purpose / notes                                                                            |
+| ---------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **smtp (telnet / netcat)** | `helo <hostname>`                                 | identify the client to the server and start a session (basic smtp).                        |
+|                        | `ehlo <hostname>`                                 | extended version of helo for esmtp; shows supported server extensions.                     |
+|                        | `mail from:<sender@domain>`                       | specify the sender’s email address.                                                        |
+|                        | `rcpt to:<recipient@domain>`                      | specify recipient of the email.                                                            |
+|                        | `data`                                            | begin sending the email content; end with `.` on a line by itself.                         |
+|                        | `rset`                                            | reset current session; abort any email being sent but keep the connection alive.           |
+|                        | `vrfy <username>`                                 | verify if a mailbox or username exists on the server.                                      |
+|                        | `expn <mailing-list>`                             | expand a mailing list or check mailbox existence.                                          |
+|                        | `noop`                                            | keep the connection alive; request a simple server response.                               |
+|                        | `quit`                                            | terminate the session gracefully.                                                          |
+|                        | `auth plain`                                      | authenticate client using esmtp authentication (usually over tls).                         |
+| **nmap**                   | `nmap -sv -p25 <target>`                          | grab banner and service version of smtp.                                                   |
+|                        | `nmap -sc -sv -p25 <target>`                      | scan with default scripts to enumerate smtp commands (ehlo, vrfy, etc.).                   |
+| **nmap nse**               | `nmap -p25 --script smtp-open-relay <target>`     | test if smtp server is an open relay (unauthenticated sending).                            |
+| **smtp / telnet**          | `starttls`                                        | upgrade plaintext smtp connection to encrypted tls.                                        |
+| **system / config**        | `/etc/postfix/main.cf`                            | postfix configuration file; defines hostname, networks, tls settings, authentication, etc. |
+| **smtp enumeration tool**  | `smtp-user-enum -m vrfy -u users.txt -t <target>` | enumerate valid usernames using vrfy, expn, or rcpt to methods.                            |
 
 
 # Imap/pop3
