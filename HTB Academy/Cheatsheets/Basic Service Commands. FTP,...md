@@ -205,6 +205,7 @@ Bruteforce to get the community string with onesixtyone, then can enumerate with
 | `select * from order by [asc                         | desc];`                                                              |
 | `select count(*) from <table>;`                      | Count number of rows in a table.                                     |
 |                                                      |                                                                      |
+|                                                      |                                                                      |
 # MSSQL
 
 | Protocol / Tool                             | Command / Syntax                                                                              | Purpose / Notes                                                                   |
