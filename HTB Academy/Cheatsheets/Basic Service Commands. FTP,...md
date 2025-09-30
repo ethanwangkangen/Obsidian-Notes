@@ -91,6 +91,9 @@ RPC Commands
 
 # DNS
 
+dig -x IP -> revesre lookup
+(more missing. https://academy.hackthebox.com/module/144/section/1251)
+
 | Protocol / Tool                  | Command / Syntax                 | Purpose / Notes                                                                                             |
 | -------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `dig`                            | `dig example.com`                | Query default DNS resolver for `example.com`.                                                               |
