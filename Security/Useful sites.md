@@ -5,3 +5,8 @@
 - https://search.censys.io/
 - https://www.virustotal.com/gui/home/search
 - https://www.shodan.io/
+
+
+Pentesting stuff
+- IPPSEC's bog: ippsec.rocks
+	- crawls IPPSEC videos for keywords
