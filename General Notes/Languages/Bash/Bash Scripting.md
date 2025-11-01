@@ -199,7 +199,7 @@ Variable length
 # Input Output
 - `echo -e "Hello`
 - `read -p "Selection your option: " opt`
-	- `-p`: ensures input remainds on the same line
+	- `-p`: ensures input remains on the same line
 	- `opt`: value stored in the variable opt
 
 ## Tee
@@ -236,6 +236,12 @@ do
 done
 ```
 - Can also use `break` inside it, usually inside an `if-else` block
+
+```bash
+while <command; do ...; done
+```
+
+- Loops as long as the command before `do` succeeds (exit status 0)
 
 ## Until loops (just use while.)
 

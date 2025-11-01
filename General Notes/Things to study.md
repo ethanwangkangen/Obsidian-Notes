@@ -1,5 +1,5 @@
 Bash (done)
-Python for pentesting
+Python for pentesting (ongoing)
 Windows sysmon stuff
 Web and API security
 Cookies

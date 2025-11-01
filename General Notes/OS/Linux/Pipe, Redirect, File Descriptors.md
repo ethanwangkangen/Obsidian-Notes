@@ -1,18 +1,20 @@
-# Pipe ( | )
-- Pipes the **stdout** of one command into the **stdin** of the next
-	- eg. `ps aux | grep nginx | wc -l
-		- ps aux → piped to grep nginx → piped to wc -l.
 
 # File descriptors
-- When `open()/socket()/pipe()`, kernel returns an **int** (0,1,2)
-	- Process uses that int with syscalls like `read(fd,..)`, `write(fd,...`
+**EVERY PROCESS** starts with 3 open file descriptors.
 - Standard FDs:
 	- 0: `stdin` (input)
 	- 1: `stdout` (output)
 	- 2: `stderr` (errors)
+- Can have more (user created)
+- The shell lets you rewire them.
+- When `open()/socket()/pipe()`, kernel returns an **int** (0,1,2)
+	- Process uses that int with syscalls like `read(fd,..)`, `write(fd,...`
 - Duping
 	- `dup2(oldfd, newfd)`
 		- makes newfd refer to the same open-file object as oldfd
+
+How to modify the fds?
+- Redirect
 # Redirect ( > )
 - Pipes the **stdout** of one command into a **file** (by default)
 	- So by default, `>` is actually `1>
@@ -27,6 +29,15 @@
 		- this means **stdout and stderr OUTPUT to the same file**
 - Can use >& (no space!) to duplicate fd (see above)
 	- The &  just means **treat this as a file descriptor and not filename**
+
+- **Redirect input:** `cmd < in.txt` (make fd 0 read from the file)
+- **Redirect output:** `cmd > out.txt` (make fd 1 write to the file, truncating)  
+    Append: `>>`
+- **Redirect errors:** `cmd 2> err.txt` (make fd 2 write to the file)
+- **Join streams:** `cmd > all.txt 2>&1`  
+    (first send stdout to file, then duplicate fd 1 onto fd 2 → both in file)
+- **Null sink:** `cmd >/dev/null 2>&1` (silence everything)
+- **Read+write same file:** `cmd <> file` (opens on fd 0 for read/write)
 
 Sequence matters!
 eg. 
@@ -50,3 +61,8 @@ versus
 		- equivalent to `1> all.txt`
 		- so stdout goes to all.txt
 		- stderr remains at terminal
+
+# Pipe ( | )
+- Pipes the **stdout** of one command into the **stdin** of the next
+	- eg. `ps aux | grep nginx | wc -l
+		- ps aux → piped to grep nginx → piped to wc -l.
