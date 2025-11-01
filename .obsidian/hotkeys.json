@@ -7,14 +7,6 @@
       "key": "P"
     }
   ],
-  "templater-obsidian:Templates/PythonCodeSnippet.md": [
-    {
-      "modifiers": [
-        "Alt"
-      ],
-      "key": "P"
-    }
-  ],
   "templater-obsidian:Templates/CppCodeSnippet.md": [
     {
       "modifiers": [
@@ -29,6 +21,14 @@
         "Alt"
       ],
       "key": "C"
+    }
+  ],
+  "templater-obsidian:Templates/PythonCodeSnippet.md": [
+    {
+      "modifiers": [
+        "Alt"
+      ],
+      "key": "P"
     }
   ]
 }
