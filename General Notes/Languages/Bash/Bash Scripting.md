@@ -220,6 +220,8 @@ do
 done
 ```
 - `for i in {1..40}` -> take note: 2 dots only
+- C style loops also acceptable
+	- `for ((i=1; i<=20; i++))`
 - `for variable in file1 file2 file3`
 - `for ip in "10.10.10.170 10.10.10.174 10.10.10.175"`
 - `for ip in $ipaddr`
