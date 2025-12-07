@@ -1,0 +1,5 @@
+- sqlmap
+- seclists
+- ruby -y
+- cupp -y
+- git clone https://github.com/urbanadventurer/username-anarchy.git\ncd username-anarchy
