@@ -342,3 +342,14 @@ For in-built processes, these are the return codes
 - `-v`
 - `-x`
 - eg. `bash -x -v CIDR.sh`
+
+
+# Piping
+`|`
+- Takes output of one command, feeds it into another command's input
+
+`<<<`
+- Sends literal string as standard input to a command
+- `grep "ethan" <<< "hello ethan how are you"
+	- equivalent to
+	- `echo "hello ethan how are you" | grep "ethan"`
