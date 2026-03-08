@@ -1,0 +1,1 @@
+- initialising bounds to matrix.size() instead of matrix.size()-1
