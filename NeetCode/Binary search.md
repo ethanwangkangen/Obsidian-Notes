@@ -39,6 +39,7 @@ return l;
 ```
 
 - Take note of returning l!!! And not mid!!!
+- May need to modify. see **find minimum in rotated sorted array**
 
 # Upper Bound / Last Valid
 ```cpp
