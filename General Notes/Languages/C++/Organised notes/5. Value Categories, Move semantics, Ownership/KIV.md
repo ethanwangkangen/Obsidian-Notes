@@ -1,0 +1,6 @@
+- custom deleters
+- std::allocator
+- placement new
+- std::optional
+- std::reference wrapper
+- std::span
