@@ -61,11 +61,12 @@ Dog Cat
  - How do you solve the diamond inheritance problem?
 	 - **Virtual inheritance**
 	 - Make Dog and Cat virtual (in the above example)
-	 - 
    
 - What if you didn't want to use virtual inheritance to solve the diamond inheritance problem?
+	- Composition
   
 - How do you prevent a virtual method from being overriden?
+	- **Final** keyword
 
 - How do virtual methods interact with access modifiers (public, private, protected)? For instance, can you override a private virtual method from a child class?    
 
