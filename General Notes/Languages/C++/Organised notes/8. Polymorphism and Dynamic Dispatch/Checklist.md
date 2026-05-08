@@ -51,10 +51,10 @@
 
 ```cpp
 Animal 
-/    \ 
+/   \ 
 Dog Cat
- \   / 
- DogCat ← inherits Animal twice!
+\   / 
+DogCat ← inherits Animal twice!
 ```
 
 
@@ -69,8 +69,9 @@ Dog Cat
 	- **Final** keyword
 
 - How do virtual methods interact with access modifiers (public, private, protected)? For instance, can you override a private virtual method from a child class?    
-
+	- 
 
 - How do you shift the cost of dynamic polymorphism to compile-time?
+	- 
 
 - What are the implications?
