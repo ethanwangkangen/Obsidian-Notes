@@ -1,2 +1,24 @@
 - SFINAE, Concepts in C++20
 - Variadic arguments in templates
+- Special member functions: which does compiler stop implicitly
+- Template 
+	- specialisation preferences
+	- static members
+- Uses of static keyword (all)
+- Recap on reference rules
+- Behaviours of the common constructs: unordered_map, etc.
+	- std::deque, set etc.
+- String literals and const char*
+- Lambdas, capturing by value vs reference, and const reference default captures
+- Overridden virtual destructors
+	- And virtual destructors in general
+- API of unique, smart and weak pointer
+- NULL vs nullptr recap
+- What templates are allowed
+- 0 behaviour when used in functions
+- :: vs ., combining to do obejct.Type::member()
+- compilation process
+- PIMPL idiom
+- initialiser list order of execution
+- review std::malloc on the stack implementation and alignment stuff.
+- std::ref()
