@@ -22,3 +22,7 @@
 - initialiser list order of execution
 - review std::malloc on the stack implementation and alignment stuff.
 - std::ref()
+
+- variadic templates, and C++20 template changes (sfinae, constrinted auto, etc.)
+- std::function
+- exceptions section
