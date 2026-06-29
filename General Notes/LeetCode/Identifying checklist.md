@@ -1,0 +1,55 @@
+- What is the output
+	- Minimum/maximum of something
+		- Monotonic property? -> Consider binary search
+	- Yes/No feasibility
+		- Often greedy
+	- Optimal value (max profit, min cost)
+		- Likely DP or greedy
+	- Number of x/does x exist -> hashset
+	- Median/running order statistic -> 2 heaps
+	- For each element, find next/previous element satisfying P -> monotonic stack
+- What is the format
+	- Subarray
+		- Monotonic property? -> Sliding window
+		- Consider all arrays ending at each index
+			- What additional info do we need?
+		- Aggregate over all subarrays -> Contribution counting (what does each element contribute)
+			- Each element either +1/-1/0 -> Longest array -> Kadane's
+		- Range queries/anything to do with subarray sum -> Prefix sum
+		- Each element can extend to the left and right -> Stack, rectangle histogram paradigm
+	- Subsequence
+		- Optimal substructure? -> DP
+		- LIS shaped? -> Binary search DP
+	- Subset/ partition into groups
+		- Small n (<= 20)? -> Bitmask DP
+		- Contiguous partitions ->> Partition DP
+		- Intervals/scheduling? -> Sort by endpoint + DP/greedy
+	- Single decision per element (take/skip, assign)
+		- DP? 
+			- If take/don't take is associated with some constraint, eg. sum so far -> Knapsack
+		- Greedy if local choice safe
+	- 2 strings
+		- 2 sequence DP
+- What does input look like
+	- Sorted array -> binary search, 2 pointers, sliding window
+	- Graph/tree -> BFS/DFS/etc.
+	- Grid -> BFS/DFS or DP
+	- Small value range -> counting/bucket
+	- Huge values, small n -> coordinate compression/binary search on answer
+- Checks to make
+	- Can binary search on the answer?
+	- Does sorting the input help?
+	- Fix a variable
+	- Fix an index
+	- Greedy -> Swap argument
+	- Does incoming variable let me forget about past stored variables?
+		- Stack
+		- Do i additionally have to pop from the front for another condition?
+			- Deque
+- Bug checks
+	- Formula direction: the comment says max(a, b) — confirm the code isn't min. (Your #1 silent-WA pattern.)
+	- Identifier: right variable, no shadowing, min/max not swapped.
+	- Base case / init: empty input, single element, dp[0], identity values (0 for sum, ±∞ for min/max).
+	- Ordering: are dependencies computed before use? (iteration direction in DP)
+	- Off-by-one: inclusive vs exclusive bounds in windows/prefix sums.
+	- Overflow: does an intermediate sum/product exceed int?
