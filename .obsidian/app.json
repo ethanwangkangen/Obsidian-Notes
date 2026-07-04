@@ -3,5 +3,6 @@
   "spellcheck": false,
   "showLineNumber": false,
   "showIndentGuide": true,
-  "alwaysUpdateLinks": true
+  "alwaysUpdateLinks": true,
+  "promptDelete": false
 }
