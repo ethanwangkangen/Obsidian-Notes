@@ -26,3 +26,4 @@
 - variadic templates, and C++20 template changes (sfinae, constrinted auto, etc.)
 - std::function
 - exceptions section
+- std::variant, std::optional, std::function
