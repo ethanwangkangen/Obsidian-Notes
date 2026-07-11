@@ -90,22 +90,23 @@ Interview-oriented. HFT-relevant notes marked ⚡. Cross-refs to your ledger whe
 
 ## 5. Combination Patterns (the "hashmap + X" catalog)
 
-|Pattern|Construction|Canonical use|
-|---|---|---|
-|**hashmap + doubly-linked list**|`unordered_map<K, list<pair<K,V>>::iterator>` + `list`|**LRU cache** (LC 146): O(1) get/put; list stability makes stored iterators safe|
-|**hashmap of counts**|`unordered_map<T,int>`|frequency problems, sliding-window "distinct count", anagram checks|
-|**prefix-sum + hashmap**|running sum → `map[sum]` = count/first-index|subarray-sum-equals-k (LC 560), longest subarray with sum 0|
-|**heap + lazy deletion**|`priority_queue` + hashmap of "dead" entries; pop-and-discard stale tops|Dijkstra without decrease-key; sliding-window max/median variants|
-|**two heaps**|max-heap (lower half) + min-heap (upper half)|running median (LC 295)|
-|**monotonic stack**|`vector`/`stack`, pop while order violated|next greater element, largest rectangle (LC 84), stock span|
-|**monotonic deque**|`deque` of indices, expire front, dominate back|sliding-window maximum (LC 239) O(n)|
-|**sorted map for intervals**|`map<int,int>` start→end, `lower_bound` neighbors|insert/merge intervals, calendar booking (LC 729)|
-|**set as ordered index**|`set<int>` + `lower_bound`|"nearest active element", seat reservation, snapshot ordering|
-|**hashmap + vector**|value→index map, swap-with-last on erase|O(1) insert/delete/getRandom (LC 380)|
-|**bucket by count**|`vector<vector<T>>` indexed by frequency|top-k frequent O(n) (LC 347 without heap)|
-|**string → canonical key**|sorted string or count-array as hashmap key|group anagrams (LC 49)|
-|**Fenwick / segment tree over compressed coords**|sort-unique values → indices → BIT|count smaller after self (LC 315) — your flagged weak paradigm|
-|**trie**|array-of-26 or hashmap children|prefix queries, XOR problems (LC 421 via bit-trie — your deferred queue)|
+| Pattern                                           | Construction                                                             | Canonical use                                                                    |
+| ------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| **hashmap + doubly-linked list**                  | `unordered_map<K, list<pair<K,V>>::iterator>` + `list`                   | **LRU cache** (LC 146): O(1) get/put; list stability makes stored iterators safe |
+| **hashmap of counts**                             | `unordered_map<T,int>`                                                   | frequency problems, sliding-window "distinct count", anagram checks              |
+| **prefix-sum + hashmap**                          | running sum → `map[sum]` = count/first-index                             | subarray-sum-equals-k (LC 560), longest subarray with sum 0                      |
+| **heap + lazy deletion**                          | `priority_queue` + hashmap of "dead" entries; pop-and-discard stale tops | Dijkstra without decrease-key; sliding-window max/median variants                |
+| **two heaps**                                     | max-heap (lower half) + min-heap (upper half)                            | running median (LC 295)                                                          |
+| **monotonic stack**                               | `vector`/`stack`, pop while order violated                               | next greater element, largest rectangle (LC 84), stock span                      |
+| **monotonic deque**                               | `deque` of indices, expire front, dominate back                          | sliding-window maximum (LC 239) O(n)                                             |
+| **sorted map for intervals**                      | `map<int,int>` start→end, `lower_bound` neighbors                        | insert/merge intervals, calendar booking (LC 729)                                |
+| **set as ordered index**                          | `set<int>` + `lower_bound`                                               | "nearest active element", seat reservation, snapshot ordering                    |
+| **hashmap + vector**                              | value→index map, swap-with-last on erase                                 | O(1) insert/delete/getRandom (LC 380)                                            |
+| **bucket by count**                               | `vector<vector<T>>` indexed by frequency                                 | top-k frequent O(n) (LC 347 without heap)                                        |
+| **string → canonical key**                        | sorted string or count-array as hashmap key                              | group anagrams (LC 49)                                                           |
+| **Fenwick / segment tree over compressed coords** | sort-unique values → indices → BIT                                       | count smaller after self (LC 315) — your flagged weak paradigm                   |
+| **trie**                                          | array-of-26 or hashmap children                                          | prefix queries, XOR problems (LC 421 via bit-trie — your deferred queue)         |
+|                                                   |                                                                          |                                                                                  |
 
 ---
 
