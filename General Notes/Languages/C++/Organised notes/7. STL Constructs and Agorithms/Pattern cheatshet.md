@@ -1127,42 +1127,42 @@ Probes: collision handling (double hash, or verify candidates by direct compare)
 
 Ratings ≈ Zerotrac where known; ⭐ = do cold this week (highest yield for you specifically). Premium marked (P).
 
-|#|Pattern|Problems|
-|---|---|---|
-|1|LRU|146 ⭐ (from scratch, timed 15 min)|
-|2|LFU|460|
-|3|Ring buffer|622, 641 (then the SPSC version from this doc, no LC equivalent)|
-|4|Two heaps|295|
-|5|Sliding median|480 ⭐ (the mock miss — both approaches)|
-|6|ID allocator|2336 ⭐, 379 (P)|
-|7|Randomized set|380, 381 (dups variant — forces you to rethink swap-and-pop)|
-|8|Min stack/queue|155, 232|
-|9|Monotonic deque|239, 1696, 862 (hard: deque over _prefix sums_ — great stretch)|
-|10|Timer/TTL|1797, 362|
-|11|Interval set|57, 352, 729 → 731 → 732 (escalating), 715 (the boss fight), 2276|
-|12|As-of KV|981|
-|13|Hit counter|362|
-|14|Object pool|(no LC — implement from this doc)|
-|15|Hashmap impl|706 (then upgrade to open addressing yourself)|
-|16|Order book|(no LC — implement from this doc, timed 25 min ⭐)|
-|17|Union-Find|547, 684, 721 ⭐ (accounts merge — DSU + canonical grouping combo), 947|
-|18|Trie|208, 211, 212, 421 ⭐ (your deferred bit-trie), 1707 (deferred; offline sort + trie)|
-|19|Snapshot|1146|
-|20|Blocking queue|1188 (P), 1115/1116 (free concurrency alternatives)|
-|21|Count maps|438, 567, 76 (the hard template), 340 (P)|
-|22|Prefix + hashmap|560 ⭐, 525, 974 (⚠ negative-mod, Category G), 325 (P)|
-|23|Monotonic stack|739, 496, 901, 907 (contribution counting — subtle), 84 ⭐, 42|
-|24|Ordered index|220 (set + lower_bound in a window), 855|
-|25|Bucket by count|347, 451, 1636|
-|26|Canonical key|49, 205, 890|
-|27|Fenwick + compression|315 ⭐ (your flagged paradigm), 493, 327 (hard: range-sum counts), 1649; segment tree: 2407 (your KIV), 218|
-|28|K-way merge|23 ⭐, 373, 378, 632 (hard), 355 (design form)|
-|29|Sweep line|253 (P — or the identical free 2406 via heap), 1094, 218, 731|
-|30|Difference array|1109, 1094, 2381|
-|31|Rolling hash|187, 28 (as hash practice), 1044 ⭐ (binary search + hash, hard)|
-|—|Iterators|173, 341, 284|
-|—|Bitmask parity|1915, 1371|
-|—|Skip list|1206|
+| #   | Pattern               | Problems                                                                                                   |
+| --- | --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| 1   | LRU                   | 146 ⭐ (from scratch, timed 15 min)                                                                         |
+| 2   | LFU                   | 460                                                                                                        |
+| 3   | Ring buffer           | 622, 641 (then the SPSC version from this doc, no LC equivalent)                                           |
+| 4   | Two heaps             | 295                                                                                                        |
+| 5   | Sliding median        | 480 ⭐ (the mock miss — both approaches)                                                                    |
+| 6   | ID allocator          | 2336 ⭐, 379 (P)                                                                                            |
+| 7   | Randomized set        | 380, 381 (dups variant — forces you to rethink swap-and-pop)                                               |
+| 8   | Min stack/queue       | 155, 232                                                                                                   |
+| 9   | Monotonic deque       | 239, 1696, 862 (hard: deque over _prefix sums_ — great stretch)                                            |
+| 10  | Timer/TTL             | 1797, 362                                                                                                  |
+| 11  | Interval set          | 57, 352, 729 → 731 → 732 (escalating), 715 (the boss fight), 2276                                          |
+| 12  | As-of KV              | 981                                                                                                        |
+| 13  | Hit counter           | 362                                                                                                        |
+| 14  | Object pool           | (no LC — implement from this doc)                                                                          |
+| 15  | Hashmap impl          | 706 (then upgrade to open addressing yourself)                                                             |
+| 16  | Order book            | (no LC — implement from this doc, timed 25 min ⭐)                                                          |
+| 17  | Union-Find            | 547, 684, 721 ⭐ (accounts merge — DSU + canonical grouping combo), 947                                     |
+| 18  | Trie                  | 208, 211, 212, 421 ⭐ (your deferred bit-trie), 1707 (deferred; offline sort + trie)                        |
+| 19  | Snapshot              | 1146                                                                                                       |
+| 20  | Blocking queue        | 1188 (P), 1115/1116 (free concurrency alternatives)                                                        |
+| 21  | Count maps            | 438, 567, 76 (the hard template), 340 (P)                                                                  |
+| 22  | Prefix + hashmap      | 560 ⭐, 525, 974 (⚠ negative-mod, Category G), 325 (P)                                                      |
+| 23  | Monotonic stack       | 739, 496, 901, 907 (contribution counting — subtle), 84 ⭐, 42                                              |
+| 24  | Ordered index         | 220 (set + lower_bound in a window), 855                                                                   |
+| 25  | Bucket by count       | 347, 451, 1636                                                                                             |
+| 26  | Canonical key         | 49, 205, 890                                                                                               |
+| 27  | Fenwick + compression | 315 ⭐ (your flagged paradigm), 493, 327 (hard: range-sum counts), 1649; segment tree: 2407 (your KIV), 218 |
+| 28  | K-way merge           | 23 ⭐, 373, 378, 632 (hard), 355 (design form)                                                              |
+| 29  | Sweep line            | 253 (P — or the identical free 2406 via heap), 1094, 218, 731                                              |
+| 30  | Difference array      | 1109, 1094, 2381                                                                                           |
+| 31  | Rolling hash          | 187, 28 (as hash practice), 1044 ⭐ (binary search + hash, hard)                                            |
+| —   | Iterators             | 173, 341, 284                                                                                              |
+| —   | Bitmask parity        | 1915, 1371                                                                                                 |
+| —   | Skip list             | 1206                                                                                                       |
 
 **Suggested 2-week sequencing** (interleave with your DP/knapsack track, don't replace it):
 
