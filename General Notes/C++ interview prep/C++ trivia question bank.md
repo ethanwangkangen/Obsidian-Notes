@@ -84,56 +84,347 @@ Explain the difference between default-initialization, value-initialization, and
 ## 2. Copy & Move Semantics (12)
 
 11. What are the five special member functions? For each, state the conditions under which the compiler implicitly generates it.
-12. Writing a user-defined destructor suppresses implicit generation of which special members? What is the practical consequence?
-13. What does `std::move` actually do? Does it move anything?
-14. After `auto b = std::move(a);` what state is `a` guaranteed to be in (a) for standard library types, (b) for your own types?
-15. A class has a `const std::string name;` member and otherwise movable members. Can objects of this class be move-constructed? Move-assigned? Explain exactly what happens to each member in each case.
-16. Why should a move constructor be marked `noexcept`? Name the specific standard-library mechanism that changes behavior based on it.
-17. What is copy elision? Which cases are _mandatory_ since C++17?
-18. Explain NRVO. Why does `return std::move(local);` usually make things worse?
-19. When does returning by value beat returning by output parameter, and when doesn't it?
-20. Implement the copy-and-swap idiom for `operator=`. What guarantees does it buy you, and what does it cost?
-21. What is the difference between `T&&` in `void f(T&& x)` where `T` is a template parameter, versus where `T` is a concrete type?
-22. Write the signature of a move constructor and move assignment operator for `class Buffer { char* data_; size_t size_; };` and implement both correctly, including self-assignment handling.
+- ?
+- Move constructor and move assignment
+	- Generated if no move or copy functions
+- Copy constructor and copy assignment
+	- Generated if no copy functions. Move functions - generated but deprecated
+- Constructor
+	- Generated if no default user constructor
+-  **X** -missing or wrong
+	- The 5 are
+	- Move constructor/assignment
+		- Only generated if there's nothing else, including destructor
+	- Copy constructor/assignment
+		- Deleted if moves exist
+		- Generated (but deprecated) if user-declared destructor/another copy function
+	- Destructor 
+		- Generated unless user defined
+	- Constructor (not one of the 5)
+		- Only generated if no user-defined constructor **INCLUDING MOVE AND COPY ONES!!!**
+
+11. Writing a user-defined destructor suppresses implicit generation of which special members? What is the practical consequence?
+- **X** -missing or wrong
+	- Suppresses move functions
+	- Consequence: every move **silently copies**
+
+11. What does `std::move` actually do? Does it move anything?
+- Doesn't actually move anything, is just unconditional cast to rvalue
+- ✅ Things to add
+	- `static_cast<std::remove_reference_t<T>&&>(x)`
+	- Doesn't guarantee a move happens. `std::move()` into a `const T&` still copies
+
+11. After `auto b = std::move(a);` what state is `a` guaranteed to be in (a) for standard library types, (b) for your own types?
+- STL types: valid but indeterminate state
+- Own types: depends on how move is implemented?
+-  **X** missing or wrong
+	- Valid but **unspecified**, not indeterminate
+	- Missing: some types give stronger guarantees — unique_ptr is guaranteed null, shared_ptr empty.
+	- For your own types the requirement is that the destructor and every operation with no preconditions must still work.
+
+11. A class has a `const std::string name;` member and otherwise movable members. Can objects of this class be move-constructed? Move-assigned? Explain exactly what happens to each member in each case.
+- Can be move constructed but not move assigned.
+- The const name member has to be initialised during construction, and cannot be reassigned. 
+- In move construction: everything is just initialised with the moved value from the original object.
+- Move assignment can't take place as the name member can't be moved into.
+- ? Can i just write a move assignment that doesn'nt touch the name variable? not sure about this.
+-  ⚠️ Half credit - things to add
+	- The const member is **copied**
+		- The implicit move ctor initializes it from std::move(other.name), which has type const std::string&&; that binds to const std::string&, so overload resolution picks the copy constructor
+	- Practical consequence
+		- not move-assignable ⇒ not assignable at all ⇒ the type can't be used with std::sort, std::remove, vector::erase, or vector reallocation-by-assignment
+
+11. Why should a move constructor be marked `noexcept`? Name the specific standard-library mechanism that changes behavior based on it.
+- So that objects can be moved instead of copied during vector reallocation.
+- ⚠️ Half credit - things to add
+	- `std::move_if_no_except()`
+	- Strong exception guarantee of vector - **KIV**
+
+11. What is copy elision? Which cases are _mandatory_ since C++17?
+- Means that if a variable is initilaised with the return value of a function, instead of creating a copy then copy constructing/assigning the variable to it, the object is directly ccreated there without copies made. NRVO is mandatory since C++17, which is named return value optimisation, vs return value optimisation which applies even without named (?) 
+-   **X** missing or wrong
+	- Opposite - NRVO is not mandatory, instead it's **unnamed** elision that is mandatory
+	- Hence the advice for immovble types (mutex, atomics) -> factory functions must *construct in the return statement itself* instead of having a named variable and creating it
+		- Because the latter will need NRVO which is optionable. And if NRVO fails, and cannot move or copy, then that doesnt compile
+
+11. Explain NRVO. Why does `return std::move(local);` usually make things worse?
+- Because NRVO will then be suppressed, as now the return value is an xvalue which can't be copy elisioned, so there is at least one copy + move being done instead of just one direct construction
+- ⚠️ Half credit - things to add
+	- `std::move(local)` costs one extra move construction
+	- `return local` -> **this actually does 2 things. first, it tries to tdo NRVO. If that fails, it treat s local as an rvalue and moves.** Thus casting to std::move() will actually disbale NRVO
+
+11. When does returning by value beat returning by output parameter, and when doesn't it?
+- ?
+
+11. Implement the copy-and-swap idiom for `operator=`. What guarantees does it buy you, and what does it cost?
+- `T& operator= (T other)`
+- No need to do identity check, and can be used for both copy and move assignment operations as it defers to the respective constructors.
+- ? cost
+- **X** missing or wrong
+	- **KIV!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1**
+	- Buys: **strong exception guarantee** (all allocation happens in the parameter copy, before `*this` is touched), self-assignment safety for free, one function for both copy and move assignment, no duplicated logic.
+	- Costs: (1) it **always allocates**. `a = b` where both already have the same capacity should reuse `a`'s buffer; copy-and-swap allocates a new one and frees the old. For hot-path assignment this is a real regression. (2) Requires a `noexcept` swap. (3) The old resource is released later than necessary (at parameter destruction). (4) You cannot then also declare separate copy- and move-assignment overloads — ambiguous.
+
+11. What is the difference between `T&&` in `void f(T&& x)` where `T` is a template parameter, versus where `T` is a concrete type?
+- T&& template parameter -> universal/forwarding reference
+- T concrete type -> rvalue reference
+- - ✅ 
+
+11. Write the signature of a move constructor and move assignment operator for `class Buffer { char* data_; size_t size_; };` and implement both correctly, including self-assignment handling.
+```cpp
+// move constructor
+Buffer (Buffer&& other) {
+	std::swap(data_, other.data_);
+	std::swap(size_, other.size_);
+}
+
+// move assignment
+Buffer& operator=(Buffer&& other ) {
+	if (this == &other) return *this;
+	std::swap(data_, other.data_);
+	std::swap(size_, other.size_);
+	return *this;
+}
+```
+- **X** missing or wrong
+- Constructor shouldn't be swap based because data and size are still uninitilaised.
+	- Unless you initialise them first
+```cpp
+
+Buffer(Buffer&& other) noexcept
+    : data_(std::exchange(other.data_, nullptr)),
+      size_(std::exchange(other.size_, 0)) {}
+
+```
 
 ## 3. Value Categories, References & Forwarding (10)
 
 23. Define lvalue, prvalue, and xvalue. Give one expression that is each.
-24. `std::string s = "hi"; std::string&& r = std::move(s);` — is `r` an lvalue or rvalue when used in a subsequent expression? Why does this matter for forwarding?
-25. Does binding a temporary to `const T&` extend its lifetime? Does binding a temporary to `T&&` extend its lifetime? Does _returning_ a `T&&` bound to a local extend anything?
-26. What are the reference collapsing rules? Show all four combinations.
-27. What is `std::forward` and why can't you just use `std::move` in its place inside a forwarding function?
-28. Write a function template `wrapper` that perfectly forwards any argument to a function `g`. Explain each token.
-29. Why is `auto&&` sometimes called a "universal reference" in range-for loops? When would you use it over `const auto&`?
-30. What does `decltype(x)` give you vs `decltype((x))` for a local `int x;`?
-31. What's the danger in `const std::string& s = cond ? str1 : "literal";`?
-32. Given `void f(int&); void f(int&&);` — which overload does each of these call: `f(5)`, `f(x)`, `f(std::move(x))`, `f(x + 1)`?
+- lvalue is a named value, eg. `int x;`
+- pr value is a permanent rvalue, like `42`
+- xvalue is an expiring value, like `std::move(x)`
+- ⚠️ Half credit - things to add
+	- P stands for **pure** not permanent
+	- The expression `x` is the lvalue.
+
+23. `std::string s = "hi"; std::string&& r = std::move(s);` — is `r` an lvalue or rvalue when used in a subsequent expression? Why does this matter for forwarding?
+- r is an lvalue because r is a named variable. Because during forwarding, one must remember to cast r to rvalue `std::move(r)` to preserve rvalueness
+- - ✅ 
+
+23. Does binding a temporary to `const T&` extend its lifetime? Does binding a temporary to `T&&` extend its lifetime? Does _returning_ a `T&&` bound to a local extend anything?
+- Yes.
+- Yes.
+- No. Lifetime extensions do not apply across function boundaries
+- ✅ 
+
+23. What are the reference collapsing rules? Show all four combinations.
+- & + && = & 
+- & + & = &
+- && + & = &
+- && + && = &&
+- ✅ 
+
+23. What is `std::forward` and why can't you just use `std::move` in its place inside a forwarding function?
+- Because std::forward preserves value categories, including both l and rvalues.
+- ✅ 
+
+
+23. Write a function template `wrapper` that perfectly forwards any argument to a function `g`. Explain each token.
+```cpp
+template <typename T>
+decltype(auto) wrapper(T&& arg) {
+	return g(std::forward<T>(arg));
+}
+```
+- T is deduced type
+- T&& is forwarding reference - binds to both lvalues and rvalues
+- `std::forward<T>` preserves the value category so rvalues are forwarded as rvalues and likewise for lvalues
+- **X** missing or wrong
+	- Forgot `return` keyword and return type (`decltype(auto)`)
+
+24. Why is `auto&&` sometimes called a "universal reference" in range-for loops? When would you use it over `const auto&`?
+- The deduction rules are the same as `T&&` so it can also bind to both lvalue and rvalues.
+- Same reasons why you would use T&&? Eg. Need rvalue references, say to move somewhere. const auto& can't be moved. (?)
+- **X** missing or wrong
+	- The primary case for auto&& in range-for is proxy references: `vector<bool>`'s operator* returns a prvalue proxy, which auto& refuses to bind. auto&& binds it.
+
+24. What does `decltype(x)` give you vs `decltype((x))` for a local `int x;`?
+- Former is the `int`, latter is `int&`
+- ✅ 
+
+24. What's the danger in `const std::string& s = cond ? str1 : "literal";`?
+- Because "literal" becomes the output of the conditional operator, it's lifetime is not extended even though it seems to bind to a const reference(?)
+- **X** missing or wrong
+	- It's lifetime **is** extended
+	- Cost: hidden temporary and allocation: even when cond is true, str1 is copied into a fresh std::string. s does not refer to str1, and you pay a heap allocation on a line that looks like a zero-cost reference binding. Mutating str1 afterwards leaves s stale.
+
+24. Given `void f(int&); void f(int&&);` — which overload does each of these call: `f(5)`, `f(x)`, `f(std::move(x))`, `f(x + 1)`?
+- latter, former, latter, latter
+- - ✅ 
+
+24. Explain the different deduction rules for templates.
+- First deduce T, then apply collapsing rules for the parameter.
+- T -> drop constness/referencedness of input
+- T& -> if input is const, T is const.
+- const T& -> T is never const.
+- T&& -> if input is lvalue, T becomes U&. else T is U. Then apply collapsing rules. 
+- - ✅ 
 
 ## 4. const, constexpr, and Compile Time (8)
 
 33. What's the difference between `const`, `constexpr`, and `consteval` on a function?
-34. Can a `constexpr` function be called at runtime? Can it contain a loop? Throw?
-35. What does `mutable` do, and give a legitimate use case that isn't "cheating."
-36. What does `const` after a member function signature mean, precisely, in terms of the `this` pointer? What about `&&` after a member function?
-37. Explain physical const vs logical const. How does `const_cast` interact with objects that were _defined_ const?
-38. What is `if constexpr` and how does it differ from a regular `if` inside a template?
-39. What's the difference between `static constexpr` and `inline constexpr` at namespace scope for avoiding ODR problems in headers?
-40. Why can `constexpr` functions still exhibit UB, and what happens if UB is reached during constant evaluation?
+- const function: const member function. Can be called on a const object
+- constexpr function: can be evaluated at compile time.
+- consteval function: MUST be evaluated at compile time (?)
+- ✅  
+
+33. Can a `constexpr` function be called at runtime? Can it contain a loop? Throw?
+- Yes can be called at runtime.
+- As of C++20, yes can contain loops (i think)
+- Unsure if can throw. My guess is not.
+- **X** missing or wrong
+	- Can throw. Reaching it during constant evaluation just isn't a constant expression. Same call at runtime throws normally
+
+33. What does `mutable` do, and give a legitimate use case that isn't "cheating."
+- mutable allows a member in a const object to be modified. A legitimate use case would be a mutex that an object owns, which would need to be lock and unlocked even in a const object
+- ✅  
+
+33. What does `const` after a member function signature mean, precisely, in terms of the `this` pointer? What about `&&` after a member function?
+- The this pointer is const. && is a ref qualifier but I forgot what it does
+-  ⚠️ Half credit - things to add
+	- && is similar; is for objects that are r-value
+
+33. Explain physical const vs logical const. How does `const_cast` interact with objects that were _defined_ const?
+- Unsure. The latter is probably UB
+- - **X** missing or wrong
+	- Physical const: no byte of the object changes
+	- Logical const: no observable state changes (mutable members may change underneath)
+	- Ok actually, but **writing** to it is UB>
+
+33. What is `if constexpr` and how does it differ from a regular `if` inside a template?
+- Only the branch that is true at compile time is instantiated, so the other branch could be ill formed and still compile (?)
+-  ⚠️ Half credit - things to add
+	- The discarded branch is uninstantiated only inside a template, and for constructs dependent on a template parameter
+
+33. What's the difference between `static constexpr` and `inline constexpr` at namespace scope for avoiding ODR problems in headers?
+- Unsure. Forgot specifics of the 'static' and 'inline' keywords.
+- **X** missing or wrong
+	- `constexpr` implie const, and namespace-scope const has **internal linkage** by default
+		- Issue if inline function/template odr uses it -> definitions differ across TUs
+	- inline constexpr is the fix since it gives external linkage
+----------
+Explanation for the above
+- Linkage = if same name appears in 2 TU, do they refer to same entity?
+	- Yes if external linkage, no if not
+- static keyword
+	- Namespace scope: means force internal linkage (eg. for functions, globals)
+	- Static member functions: Not tied to an instance of the class, can be invoked without creating object
+	- Static data members: Belongs to the class, not tied to instance of class
+	- Static local variables: Shared across function calls
+- inline keyword
+	- Means **entity can be defined identically in multiple TUs and linker must merge into one entity**
+		- Relaxation of ODR, and entity keeps external linkage
+	- Rationale
+		- Allow definitions in headers
+- Relation to this question
+	- constexpr implies const, and namespace-scope const has internal linkage by default
+		- Problematic for odr-use / inline functions (eg. taking its address, binding a reference to it)
+		- The fix is to use inline keyword.
+	- One liner remember: **constexpr implies inline for functions but implies internal linkage for variables. This is the root of the problem**
+		- `inline constepr int k = 5;` - the 'inline' here is to keep the linkage external.
+
+33. Why can `constexpr` functions still exhibit UB, and what happens if UB is reached during constant evaluation?
+ - **X** missing or wrong
+	- Because constexpr is just a permission, so runtime calls have UB like normally. During constant evaluation, UB is not a core constant expression - in a context requiring a constant you get a hard **diagnosed compile error** 
 
 ## 5. Templates & Metaprogramming (12)
 
 41. What is the difference between a function template and a template function instantiation? When does instantiation happen?
-42. Explain SFINAE in one paragraph, and show a minimal `enable_if` example gating a function on `is_integral`.
-43. What do C++20 concepts replace, and what advantages do they have over SFINAE beyond nicer errors?
-44. What is CRTP? Write the skeleton and explain how the base can call derived methods without virtual dispatch. What is the cost/benefit vs virtual functions?
-45. Why must template definitions typically live in headers? What is explicit instantiation and how does it change this?
-46. What is two-phase lookup? Why do you sometimes need `this->` or `typename` inside templates?
-47. When is `typename` required before a dependent name? When is `template` required?
-48. What is template argument deduction for class templates (CTAD)? Give an example with `std::pair` or a deduction guide.
-49. What's the difference between full specialization and partial specialization? Which is allowed for function templates?
-50. Implement a compile-time `factorial` two ways: recursive template and `constexpr` function. Which would you use today and why?
-51. What is a variadic template? Write `sum(args...)` using a fold expression.
-52. What is `std::void_t` useful for? Sketch a detection idiom checking whether `T` has a member `size()`.
+- Function template is like blueprint for generated machine code, while instantiation is the compiler generating the actual code to be used, and happens when the template is called.
+- 
+41. Explain SFINAE in one paragraph, and show a minimal `enable_if` example gating a function on `is_integral`.
+- SFINAE stands for substitution failure is not an error. Unsure after this.
+
+41. What do C++20 concepts replace, and what advantages do they have over SFINAE beyond nicer errors?
+- Replace SFINAE. Unsure beyond this.
+
+41. What is CRTP? Write the skeleton and explain how the base can call derived methods without virtual dispatch. What is the cost/benefit vs virtual functions?
+- CRTP stands for curiously recurring template programming.
+	- Base class casts this pointer to Derived*, then calls implementation
+	- Base class templates the Derived class 
+	- Just remember: **Base class does all the work (templating and casting).** Derived class just writes implementation
+- Benefit:
+	- No virtual pointer indirection, object is not made bigger due to need to store virtual pointer
+- Cost:
+	- Larger binary, longer compile time.
+	- If binary becomes too large, eventually might slow down program as instruction cache becomes polluted resulting in more cache misses
+```cpp
+template <typename Derived>
+class Base{
+public:
+	void interface() {
+		static_cast<Derived*>(this)->impl();
+	}
+};
+
+class Derived : public Base <Derived> {
+public:
+	void impl() {
+		//implementation
+	}
+};
+```
+
+
+42. Why must template definitions typically live in headers? What is explicit instantiation and how does it change this?
+- Because every translation unit that instantiates a template must see its definition.
+- I think explicit instantiation means that the template is instantiated during compile time, after which that specialisation can be used freely(?)
+
+42. What is two-phase lookup? Why do you sometimes need `this->` or `typename` inside templates?
+- Unsure
+
+42. When is `typename` required before a dependent name? When is `template` required?
+- Unsure. I know it's required in the case of iterators(?)
+
+42. What is template argument deduction for class templates (CTAD)? Give an example with `std::pair` or a deduction guide.
+- eg. `std::pair p{3, 3};` -> deduced to `std::pair<int, int> p{3, 3}`
+
+42. What's the difference between full specialization and partial specialization? Which is allowed for function templates?
+- Full specialisation: everything is specialised. Partial: some are not specialised and nothing is instantiated yet. No partial specialisation for functions.
+
+42. Implement a compile-time `factorial` two ways: recursive template and `constexpr` function. Which would you use today and why?
+```cpp
+template <int a, int b>
+int factorial() {
+	if (b == 1) return a;
+	return factorial<a*b, b-1>();
+}
+
+constexpr int factorial(int a, int b) {
+	if (b == 1) return a;
+	return factorial(a*b, b-1);
+}
+```
+- Probably the latter as it won't make the binary bigger and is more intuitive.
+
+```cpp
+template <int N> 
+struct Factorial { 
+	static constexpr int value = N * Factorial<N-1>::value; 
+};
+template <>    
+struct Factorial<0> { 
+	static constexpr int value = 1; 
+};
+```
+
+
+43. What is a variadic template? Write `sum(args...)` using a fold expression.
+- Template that can take in multiple arugments.
+- Don't know how. A bit confused with the syntax for this.
+
+43. What is `std::void_t` useful for? Sketch a detection idiom checking whether `T` has a member `size()`.
+- Unsure
 
 ## 6. Inheritance & Virtual Dispatch (10)
 
