@@ -7,12 +7,19 @@ Each answer is calibrated to ~20–30 seconds spoken (60–90 words). HFT-releva
 ## 1. Processes & Lifecycle
 
 **Q1.1 — What does `fork()` do, and what does it return?** `fork()` creates a child process that is a near-copy of the parent: same code, a copy of the address space, copies of the file descriptor table. It returns twice — **0 in the child, the child's PID in the parent, -1 on failure** — and you branch on that return value to run different code in each process. The copy is lazy: pages are shared copy-on-write, so fork is cheap even for a huge process.
+```cpp
+pid_t pid = fork();
+if (pid < 0)      { /* error */ }
+else if (pid == 0){ /* child code */ }
+else              { /* parent code, pid = child's PID */ }
+```
 
 **Q1.2 — What does `exec()` do? Why is it separate from `fork()`?** `exec` replaces the current process image with a new program — same PID, same open FDs by default, but new code, data, heap, and stack. On success it never returns. Unix splits creation (`fork`) from loading (`exec`) so the child can be _configured between the two_: redirect file descriptors, wire up pipes, drop privileges, change directory — then exec. That gap is exactly how shells implement redirection and pipelines.
 
 **Q1.3 — What do `wait()` / `waitpid()` do?** The parent blocks until a child changes state, and collects the child's exit status. Crucially, this is also how the kernel gets permission to free the child's process-table entry — until someone waits, the dead child stays around as a zombie. `waitpid` lets you target a specific child and pass `WNOHANG` to poll without blocking. `WIFEXITED`/`WEXITSTATUS` decode the status.
 
 **Q1.4 — What is a zombie process? An orphan?** A **zombie** is a child that has exited but whose parent hasn't called `wait` yet — the kernel keeps its PID and exit status in the process table so the parent can still collect them. It consumes a process-table slot, not real memory. Fix: reap it (`wait`, or a `SIGCHLD` handler). An **orphan** is a live child whose parent died first; it's re-parented to `init`/`systemd`, which reaps it on exit — so orphans don't become permanent zombies.
+Reason - must hang around so exit status can be found.g
 
 **Q1.5 — What is copy-on-write?** After fork, parent and child share the same physical pages, all marked read-only in both page tables. When either process writes, the CPU faults, and the kernel copies just that one page and makes it writable. So fork copies page tables, not memory — a multi-GB process forks in microseconds, and pages that are never written are never duplicated.
 
@@ -32,7 +39,34 @@ printf("%d\n", x);
 
 Two lines: `10` (child) and `0` (parent), order not guaranteed unless the parent's `wait` happens before its own printf — here it does wait first, so the child's `10` prints before the parent's `0`. The key point to say out loud: **after fork the variables are independent copies** — the child's `+=` never affects the parent's `x`.
 
+
 ---
+Learning points
+- Each process has a page table, mapping virtual memory to main memory
+	- The actual memory is stored in the **pages** themselves.
+	- The page table just stores the mappings
+- When fork()
+	- New process created = new page table
+	- The page table entries are then **copied**. The **pages** themselves are **not copied**.
+		- Only copy pages when the new process **writes**
+		- And of course, code pages are never written to so always shared.
+			- eg. there's only every one copy of libc
+- Demand paging
+	- `malloc(1GB)` doesnt actually put anyting in the page table.
+	- The first time you touch a byte there - CPU walks page table, finds no entry - page fault
+	- Kernel checks records - is this address in a region I promised? Yes -> allocate one physical page, zero it, install page table entry and continue
+		- One byte written, own one 4kb page
+- The key point
+	- A process' memory is a promise, not a possession. The address space is a description of what the process is entitled to see; physical pages are attached lazily, shared covertly etc.
+- VIRT vs RSS
+	- VIRT = sum of promises
+	- RSS = materialized physical pages
+	- free() doesn't drop RSS
+		- 2 layers of promises - free() returns chunks to userspace allocator's pool for reuse, allocator rarely returns pages to kernel
+	- 
+
+
+
 
 ## 2. Threads vs Processes
 
@@ -47,6 +81,19 @@ Two lines: `10` (child) and `0` (parent), order not guaranteed unless the parent
 **Q2.5 — What actually happens during a context switch?** Kernel saves the current task's registers, PC, and stack pointer into its task struct; picks the next task via the scheduler; restores that task's state; for a different process, also loads its page-table base. Triggered by the timer interrupt, the task blocking (I/O, lock), or a higher-priority task waking.
 
 ---
+Learning points
+- Process switch - new page table, require TLB flush 
+- Thread switch - no need TLB flush since same address space
+	- Thread has its own stack - just carves out a portion of the address space for its own stack. That means there's a limit to the number of threads.
+	- But on 64 bit systems, the constraint is actually the kernel stack
+		- Kernel stack is unpromiseable, needs to actaully be there (unlike user stack, which is demand-paged and growable)
+- Can you have a pointer into another thread's stack?
+	- Yes, as long as that stack's frame is alive
+- So process vs thread switch
+	- Both: save state into task's kernel stack/thread_struct, run scheduler, restore task's next state. swap page table root
+	- For proess: historically, TLB flushed (but now due to ASID tagging, TLB entries are stamped with address space's ID so switching page tables just means new process' translations hit its own tagged entries (could still be warm))
+
+
 
 ## 3. Scheduling
 
@@ -235,4 +282,4 @@ Two lines: `10` (child) and `0` (parent), order not guaranteed unless the parent
 - **epoll is O(ready); select/poll are O(n).** Edge-triggered ⇒ non-blocking + drain to EAGAIN.
 - **SIGKILL/SIGSTOP are uncatchable; everything else is negotiable.**
 - **Handlers: async-signal-safe only** — set a flag or write to a self-pipe.
-- **ldd = what the loader will actually map, resolved for this machine.**
+- **ldd = what the loader will actually map, resolved for this machine.**age numbers

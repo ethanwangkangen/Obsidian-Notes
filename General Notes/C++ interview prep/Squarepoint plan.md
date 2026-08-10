@@ -87,16 +87,37 @@ Travel. If trivially convenient: open HackerRank CodePair once. Otherwise nothin
 4. **OS block 1 — master-list categories 1–3** (processes & lifecycle, threads vs processes, scheduling). Cover-the-answer drill per C.5; misses → ledger (1h).
 5. **OSTEP ch. 4** (1h).
 6. **LC splice: 1574 Shortest Subarray to be Removed to Make Array Sorted** (1931, array/two-pointer). Offered Aug 2 — if you finished it then, tell me and I'll swap (0.5h).
+----
+Completed
+- SPSC queue (without linking), testing
+- OS mater-list categories 1, 2.
+- Order book
+
+Backlog
+- Order book review
+	- Iterators
+- Post it notes
+	- std::erase
+	- Key stl structures, alrogithms, iterator rules
+	- coding checklist
+- SPSC wiring 
 
 ## Aug 9 (Sun) — 7.5h — MoldCast day 2
 
-1. MoldCast: finish wiring — `atomic<bool>` + jthread shutdown, clean teardown, end-to-end smoke test with the gap path exercised (3.5h).
+1. MoldCast: finish wiring — `atomic<bool> `+ jthread shutdown, clean teardown, end-to-end smoke test with the gap path exercised (3.5h).
 2. **Locked SPSC blank redo** (A.6a) — bar: all three Jul-31 bug classes clean (1h).
 3. **OSTEP ch. 5** — THE fork chapter; do the output examples mentally; retires your ★fork miss (1h).
 4. **Git recap** (E.2) — all of it (1h).
 5. **Bank: next group** (1h).
 6. **LC splice: 1567 Maximum Length Subarray With Positive Product** (1710, DP — deliberately light on a MoldCast-heavy day) (0.5h).
-
+----
+Completed
+- SPSC queue integration - YAY
+- Lock-free SPSC blank redo
+- Locked SPSC blank redo
+- Cheatsheet post it notes
+- Git notes
+- 
 ## Aug 10 (Mon) — 7.5h — MoldCast day 3, then FROZEN
 
 1. MoldCast: benchmarks — throughput + gap p50/p99, taskset. **Write down and memorize both numbers** (3h).
@@ -104,6 +125,21 @@ Travel. If trivially convenient: open HackerRank CodePair once. Otherwise nothin
 3. **Thread pool #1** (A.5), condvars hot from the wiring (1.5h).
 4. **OSTEP ch. 6** — syscalls, modes, context switch (1h).
 5. **OS block 2 — master-list categories 4–7** (syscalls & privilege, virtual memory, memory layout, heap internals); cover-the-answer, misses → ledger (0.5h). **LC 1396** (0.5h).
+----
+Completed
+- Cheatsheet notes
+- Implement file system (without any virtual)
+- Thread pool
+	- Vector and notes
+- std::functional, optional
+
+Tomorrow:
+- Pool allocator
+- Recap T[], unique ptr etc.
+- Memory, array and placement new notes 
+- Moldcast wrapup
+- Finish OS + OSTEP backlogs
+- Map?
 
 ## Aug 11 (Tue) — 7.5h — OOD core begins
 
@@ -160,10 +196,10 @@ Travel. If trivially convenient: open HackerRank CodePair once. Otherwise nothin
 ## Aug 16 (Sun) — 7.5h — MOCK 1
 
 1. **Mock 1, format A:** 5' intro / 35' OS + comp-arch + C++ internals quick-fire / 30' unseen OOD. Graded on conclusions AND mechanisms — the mechanism rule is a scoring line (1.5h incl. debrief).
-2. **Patch the top bleeding items** + any bank-group top-ups owed (2h).
+2. **Patch the top bleeding items** + any bank-group top-ups owed — this window is sacred; it absorbs whatever the mock exposes (1.75h). 2b. **⚡ A.13 build block: hash map from scratch (45') + binary heap (20')** — the two implementation gaps from the Aug-3 audit; the rehash-invalidation payoff sentence is the graded moment (1.25h).
 3. **Range Module redo #2 — the clean bar** (0.5h).
 4. **Ledger full read, part 1** — categories aloud: G, E, F, C, SWO (1h).
-5. **Constructor-call-counting output drills** — the exact IITD R2 exercise: predict ctor/copy/move/dtor counts for snippet sets (elision, pass-by-value, return paths, vector growth) (1.5h).
+5. **Constructor-call-counting output drills** — the exact IITD R2 exercise: predict ctor/copy/move/dtor counts for snippet sets (elision, pass-by-value, return paths, vector growth). Bank groups 1–2 already covered this territory; one focused hour, not more (1h).
 6. Reflex check: cache numbers, fork returns, dangling-vs-leak, benchmark numbers (0.5h).
 
 ## Aug 17 (Mon) — 7.5h
@@ -225,7 +261,7 @@ _London R1 "implement maps"; IIT BHU rotations. Your stated freeze._
 ### A.3 std::function wrapper — _confirmed Montreal R2_
 
 - Variant a: wrapper class over `std::function<R(Args...)>` (count/timing/logging/retry); `template <typename R, typename... Args> class Wrapper<R(Args...)>` syntax cold.
-- Variant b: mini std::function — CallableBase (virtual invoke/clone/dtor),` CallableImpl<F>`, unique_ptr.
+- Variant b: mini std::function — CallableBase (virtual invoke/clone/dtor), `CallableImpl<F>`, unique_ptr.
 - Grilling: unbounded size ⇒ heap; SBO (~2–3 words inline); type erasure ⇒ indirect dispatch; copyable ⇒ clone ⇒ move-only lambdas excluded ⇒ C++23 move_only_function; perfect-forward Args.
 
 ### A.4 Vector (blank redo, ledger-audited)
@@ -254,7 +290,7 @@ Composite: Node base (name, raw parent ptr), File (content), Directory (`**std::
 
 ### A.10 Currency exchange as OOP — _IIT BHU_
 
-CurrencyConverter::addRate (clarify implied 1/rate), bestRate → `optional<double>` + path; Graph{unordered_map<string, `vector<Edge>>`} · maximize product → w = −log(rate) → shortest path · **rate>1 ⇒ negative weight ⇒ Dijkstra invalid ⇒ Bellman-Ford** · flex: negative cycle = product>1 cycle = **arbitrage detection** · rates ≤1 or hop-bounded ⇒ Dijkstra/BFS variants, and why then valid.
+CurrencyConverter::addRate (clarify implied 1/rate), bestRate → `optional<double>` + path; Graph{unordered_map<string, `vector<Edge>`>} · maximize product → w = −log(rate) → shortest path · **rate>1 ⇒ negative weight ⇒ Dijkstra invalid ⇒ Bellman-Ford** · flex: negative cycle = product>1 cycle = **arbitrage detection** · rates ≤1 or hop-bounded ⇒ Dijkstra/BFS variants, and why then valid.
 
 ### A.11 Trie as OOD (NEW — was an accepted risk, now covered)
 
@@ -272,20 +308,22 @@ _Why: LC 1268 (Search Suggestions) is a Squarepoint-attributed OA question in yo
 - **Nothrow/noexcept guarantee:** never throws — required of destructors, expected of moves and swap. A `noexcept` function that throws → `std::terminate`.
 - **Strong guarantee:** commit-or-rollback — the operation either succeeds or leaves state unchanged. `vector::push_back` gives it (a throwing copy during realloc leaves the vector intact — and this is WHY `move_if_noexcept` exists). Copy-and-swap is the idiom that manufactures it — which is your vector redo's copy-assignment stance, name it as such.
 - **Basic guarantee:** no leaks, invariants intact, state valid but unspecified.
-- The HFT footnote: many trading codebases build `-fno-exceptions` (unwind tables, icache, determinism) — but the guarantee _vocabulary_ still applies to any mutating API, so know it regardless. **std::optional (a flagged gap):** value-or-empty with **inline storage** — aligned buffer + engaged flag, no heap allocation ever. `nullopt` ≠ default-constructed T. `value()` throws `bad_optional_access`; `*opt` on empty is UB (bounds-check-first reflex applies); `value_or(x)` for defaults. Use as a return type for "not found" instead of sentinels or out-params — your A.10 `bestRate` already does this, say so. `optional<T&>` doesn't exist (until C++26); use `T*` for an optional reference. **weak_ptr — the two use cases (a verbatim R1 sighting):** (1) breaking `shared_ptr` cycles (parent holds shared, child holds weak back-pointer); (2) non-owning observation of a maybe-dead object — caches, observer lists: `lock()` atomically yields owning-shared-or-null; checking `expired()` then dereferencing is a TOCTOU bug, always `lock()`. **Semaphore vs mutex (asked in two accounts):** mutex = mutual exclusion WITH ownership (the locker must unlock); semaphore = counter + signaling with NO ownership (any thread may release), counting vs binary; a binary semaphore is not a mutex (no ownership, no priority-inheritance possibilities). C++20: `std::counting_semaphore` / `binary_semaphore`. vs condvar: a condvar needs mutex+predicate and can wake spuriously; a semaphore carries its count. Thread-pool framing: a tasks-available counting semaphore is the alternative to cv+predicate — be able to sketch both. **Design-patterns vocabulary (warm-up currency, one sentence each):** thread-safe singleton = Meyers singleton, static local + C++11 magic statics · observer = your market-data/logger callback shape · factory = construction behind an interface · RAII is itself the C++ pattern answer · **CRTP/static polymorphism = the HFT answer to "virtual is too slow"** — compile-time dispatch, no vtable indirection. No UML, ever. **Rate limiter + logger (narration only — common OOD asks, 15 lines each):** token bucket = capacity + refill-rate; `allow()` = refill-by-elapsed-time, then spend-or-reject; inject the clock for testability. Async logger = producer threads → MPSC/SPSC queue → single writer thread — which is _literally your MoldCast consumer pattern with a file at the end_; one sentence and it's answered. **SQL: consciously risk-accepted** — one low-signal mention across every account, Python-track flavored; SELECT/WHERE/GROUP BY/JOIN at read-level only.
+- The HFT footnote: many trading codebases build `-fno-exceptions` (unwind tables, icache, determinism) — but the guarantee _vocabulary_ still applies to any mutating API, so know it regardless. **std::optional (a flagged gap):** value-or-empty with **inline storage** — aligned buffer + engaged flag, no heap allocation ever. `nullopt` ≠ default-constructed T. `value()` throws `bad_optional_access`; `*opt` on empty is UB (bounds-check-first reflex applies); `value_or(x)` for defaults. Use as a return type for "not found" instead of sentinels or out-params — your A.10 `bestRate` already does this, say so. `optional<T&>` doesn't exist (until C++26); use `T*` for an optional reference. **weak_ptr — the two use cases (a verbatim R1 sighting):** (1) breaking `shared_ptr` cycles (parent holds shared, child holds weak back-pointer); (2) non-owning observation of a maybe-dead object — caches, observer lists: `lock()` atomically yields owning-shared-or-null; checking `expired()` then dereferencing is a TOCTOU bug, always `lock()`. **Semaphore vs mutex (asked in two accounts):** mutex = mutual exclusion WITH ownership (the locker must unlock); semaphore = counter + signaling with NO ownership (any thread may release), counting vs binary; a binary semaphore is not a mutex (no ownership, no priority-inheritance possibilities). C++20: `std::counting_semaphore` / `binary_semaphore`. vs condvar: a condvar needs mutex+predicate and can wake spuriously; a semaphore carries its count. Thread-pool framing: a tasks-available counting semaphore is the alternative to cv+predicate — be able to sketch both. **R1-depth concurrency trivia (spoken, 30 seconds each — the verbal counterpart to the build-it sessions):** **volatile vs atomic** — volatile means "don't optimize away this access," for MMIO and signal handlers; it gives NO atomicity and NO ordering, so it is never the cross-thread answer (Java's volatile is different — don't conflate), while `std::atomic` gives both. **Spurious wakeup** — `cv.wait` can return without a notify, which is why the predicate overload is mandatory and a bare `wait` is a bug. **What "thread-safe" actually means** — no data races AND invariants hold across concurrent calls; individually-safe operations don't make a check-then-act sequence safe (same TOCTOU shape as `expired()`-then-dereference). **Mutex vs spinlock** — spinning burns CPU but skips the syscall and context switch; worth it only when the critical section is shorter than a park/wake round-trip, which is precisely the HFT framing. Drill these in the Aug 15 A.12 hour alongside semaphore-vs-mutex. **Design-patterns vocabulary (warm-up currency, one sentence each):** thread-safe singleton = Meyers singleton, static local + C++11 magic statics · observer = your market-data/logger callback shape · factory = construction behind an interface · RAII is itself the C++ pattern answer · **CRTP/static polymorphism = the HFT answer to "virtual is too slow"** — compile-time dispatch, no vtable indirection. No UML, ever. **Rate limiter + logger (narration only — common OOD asks, 15 lines each):** token bucket = capacity + refill-rate; `allow()` = refill-by-elapsed-time, then spend-or-reject; inject the clock for testability. Async logger = producer threads → MPSC/SPSC queue → single writer thread — which is _literally your MoldCast consumer pattern with a file at the end_; one sentence and it's answered. **SQL: consciously risk-accepted** — one low-signal mention across every account, Python-track flavored; SELECT/WHERE/GROUP BY/JOIN at read-level only.
+
+### A.13 Hash map + heap (the two implementation gaps found in the Aug-3 audit)
+
+**Hash map from scratch (45-min build, Aug 16):** the missing twin of A.1 — you implement the tree map three times but the hash map zero, and "implement unordered_map" is asked at least as often.
+
+- Separate chaining: `std::vector<std::list<std::pair<K,V>>> buckets_;` + `std::hash<K>{}(k) % buckets_.size()`. insert = find-in-bucket else push; find = walk the bucket; erase = bucket list erase.
+- Rehash: when `size_ / buckets_.size() > max_load`, allocate a bigger bucket vector (double, keep it simple live) and re-slot every node. **The payoff sentence, yours uniquely:** rehashing invalidates iterators but NOT references/pointers — the nodes survive, only the bucket array is rebuilt. That is row 4 of your own invalidation grid, explained from the inside; say it unprompted.
+- Talk track: open addressing (linear probing, tombstones on erase) vs chaining — latency shops often prefer open addressing because one contiguous array beats pointer-chasing per bucket (connects to your cache script); load factor trade-offs; why keys need Hash + KeyEqual; per-bucket `list` vs `forward_list` (std uses forward_list-style nodes).
+- 45-min done bar: buckets + insert + find + erase + a working rehash, narrated. **Binary heap (20-min build, same Aug 16 slot):** vector storage; push = append + sift-up (`(i-1)/2`); pop = swap front/back, pop_back, sift-down (children `2i+1`, `2i+2`, swap with the larger); heapify bottom-up = O(n) (say why: work is bounded by node heights, which sum to O(n)). This is the machine under every priority_queue you've used. **Narration tier (read in the Aug 17 A.12 slot, no build):** **std::deque internals, two sentences** — chunked fixed-size blocks + a small map of block pointers; end-insertion may grow the pointer map (iterators invalidated) but never moves the blocks (references survive) — which is row 2 of your invalidation grid explained from the inside, completing the set: you can now explain all four rows mechanistically (vector realloc, deque blocks, node containers, rehash). Fixed-size **memory pool** = pre-allocated block array + free list threaded through the blocks themselves; allocate = pop head, deallocate = push front — ~10 lines, and it IS the "node pooling" follow-up already named in A.2. **String with SSO** = implement-vector's known variant: small buffer inline in the object (union with the heap pointer), so short strings never allocate — one paragraph, know the shape. **Bloom filter** one-liner: k hash bits set in a bitset; may say yes wrongly, never says no wrongly. **LFU** one-liner: LRU's harder sibling — frequency buckets, each holding an LRU list; O(1) via the same iterator-locator trick a third time. Cuttable: the heap and the narration tier, reluctantly. The hash map build is not — it is the largest genuinely-common implementation question the plan otherwise skips.
 
 ## Appendix B — Mechanics sheet
 
 Re-read before every OOD session until nothing surprises you.
 
-**Iterators & searching:** 
-- set/map iterators bidirectional — no it+5; free lower/upper_bound on them O(n), **always member versions** 
-- lower_bound(k)=first ≥k, upper_bound(k)=first >k; "last ≤k" = upper_bound then --it after begin() check 
-- sentinel pair keys: last first<=L → upper_bound({L,INT_MAX}) step back; first first>=L → lower_bound({L,INT_MIN}) 
-- erase loop: `it = c.erase(it);` else `++it;` 
-- **copy before erase:** `auto [a,b] = *it;` not auto& 
-- rbegin = last 
-- std::sort needs random access.
+**Iterators & searching:** set/map iterators bidirectional — no it+5; free lower/upper_bound on them O(n), **always member versions** · lower_bound(k)=first ≥k, upper_bound(k)=first >k; "last ≤k" = upper_bound then --it after begin() check · sentinel pair keys: last first<=L → upper_bound({L,INT_MAX}) step back; first first>=L → lower_bound({L,INT_MIN}) · erase loop: `it = c.erase(it);` else `++it;` · **copy before erase:** `auto [a,b] = *it;` not auto& · rbegin = last · std::sort needs random access.
 
 **Invalidation grid:**
 
@@ -298,25 +336,17 @@ Re-read before every OOD session until nothing surprises you.
 
 Order-book locator, LRU splice, filesystem children, trie children = row-3/ownership applications. Say so when you use them.
 
-**Comparators & heaps:** SWO — strict <, comp(a,a)==false, equals false both ways; <= or equality shortcuts = UB in sort · priority_queue with lambda needs the ctor arg (capturing always; everything pre-C++20) · `greater<T> `= min-heap · pre-C++20 safe answer: named functor.
+**Comparators & heaps:** SWO — strict <, comp(a,a)==false, equals false both ways; <= or equality shortcuts = UB in sort · priority_queue with lambda needs the ctor arg (capturing always; everything pre-C++20) · `greater<T>` = min-heap · pre-C++20 safe answer: named functor.
 
-**Construction & insertion:** push_back({a,b}) = braced list; emplace_back(a,b) = ctor forwarding (the (count,value) trap) · map::operator[] default-constructs; insert won't overwrite, insert_or_assign will · bounds check FIRST in any short-circuit; never lean on `s[size()]=='\0'.
+**Construction & insertion:** push_back({a,b}) = braced list; emplace_back(a,b) = ctor forwarding (the (count,value) trap) · map::operator[] default-constructs; insert won't overwrite, insert_or_assign will · bounds check FIRST in any short-circuit; never lean on s[size()]=='\0'.
 
-**Standing reflexes:** 
-(1) signed/unsigned — hoist int n = size() and USE it 
-(2) growth `cap?cap*2:1` 
-(3) consume through the index, then advance
-(4) move ctors initialize (std::exchange), never swap; moves noexcept · (5) **no dead couts in anything human-read** 
-(6) widen before multiplying, mod during, never 1<<big, no FP modular arithmetic 
-(7) ((x%m)+m)%m 
-(8) mental -Wall; if (a=b) has cost you once 
-(9) **conclusion + mechanism; unknown mechanism = say so, never invent.**
+**Standing reflexes:** (1) signed/unsigned — hoist int n = size() and USE it · (2) growth cap?cap*2:1 · (3) consume through the index, then advance · (4) move ctors initialize (std::exchange), never swap; moves noexcept · (5) **no dead couts in anything human-read** · (6) widen before multiplying, mod during, never 1<<big, no FP modular arithmetic · (7) ((x%m)+m)%m · (8) mental -Wall; if (a=b) has cost you once · (9) **conclusion + mechanism; unknown mechanism = say so, never invent.**
 
 ## Appendix C — OS & comp arch: prompts, facts, reading
 
 ### C.1 Paste-ready prompt — OS master list
 
-> Generate a comprehensive interview-prep master list (question + model answer, ≤30-second verbal answers) for a C++ HFT-adjacent graduate role, covering these OS categories: (1) processes & lifecycle — fork/exec/wait, return values, zombies/orphans, fork-output prediction problems; (2) threads vs processes — shared vs private, creation and context-switch costs; (3) scheduling — preemption, priorities, Linux CFS at one-liner depth; (4) syscalls & privilege — user/kernel mode, traps, why syscalls are expensive; (5) virtual memory — multi-level page tables, TLB, page faults, demand paging, swap, why VM exists; (6) process memory layout — stack/heap/data/text, stack vs heap trade-offs; (7) heap internals — malloc, brk vs mmap, fragmentation; (8) synchronization — mutex, semaphore, condition variable, spinlock, when each; (9) deadlock — four conditions, prevention via lock ordering; (10) data races vs race conditions — UB vs logic error, atomics; (11) IPC — pipes (incl. fork+close pattern), named pipes, shared memory, sockets, signals; (12) file descriptors & I/O — open/read/write/close, dup2, everything-is-a-file; (13) I/O multiplexing — select vs poll vs epoll, level vs edge triggered, non-blocking I/O; (14) signals — SIGSEGV/SIGKILL/SIGTERM/SIGINT semantics; (15) linking & loading — static vs dynamic, what ldd shows.
+> Generate a comprehensive interview-prep master list (question + model answer, ≤30-second verbal answers) for a C++ HFT-adjacent graduate role, covering these OS categories: (1) processes & lifecycle — fork/exec/wait, return values, zombies/orphans, fork-output prediction problems; (2) threads vs processes — shared vs private, creation and context-switch costs; (3) scheduling — preemption, priorities, Linux CFS at one-liner depth; (4) syscalls & privilege — user/kernel mode, traps, why syscalls are expensive; (5) virtual memory — multi-level page tables, TLB, page faults, demand paging, swap, why VM exists; (6) process memory layout — stack/heap/data/text, stack vs heap trade-offs; (7) heap internals — malloc, brk vs mmap, fragmentation; (8) synchronization — mutex, semaphore, condition variable, spinlock, when each; (9) deadlock — four conditions, prevention via lock ordering; (10) data races vs race conditions — UB vs logic error, atomics; (11) IPC — pipes (incl. fork+close pattern), named pipes, shared memory, sockets, signals; (12) file descriptors & I/O — open/read/write/close, dup2, everything-is-a-file; (13) I/O multiplexing — select vs poll vs epoll, level vs edge triggered, non-blocking I/O; (14) signals — SIGSEGV/SIGKIL.L/SIGTERM/SIGINT semantics; (15) linking & loading — static vs dynamic, what ldd shows.
 
 ### C.2 Paste-ready prompt — comp arch master list
 
