@@ -149,6 +149,15 @@ Tomorrow:
 4. **Comp arch block 1 — master-list categories 1–4** (hierarchy & latency numbers, cache organization, cache-friendly code, coherence & false sharing), then the 60-second cache script aloud five times, numbers included (1h).
 5. **OSTEP ch. 13 + 18** (1.5h). Sheet marked items (0.5h).
 6. **LC splice: 2008 Maximum Earnings From Taxi** (1871, DP + binary search — the one you deferred from your own Aug 1 set) (0.5h).
+Plan for today
+- 2.30-3 pack and prepare
+- 3-3.30 std::optional, T[] and make_unique recap (missed)
+- 3.30-4.30 pool allocator
+- 4.30-5 condense sqpt and jump questions, rest
+- 5-6 OS until block 4
+- 6-8 dinner and rest
+- 8-9 Comp arch until block 4
+- 9-1 Moldcast wrapup
 
 ## Aug 12 (Wed) — 7.5h
 
@@ -394,17 +403,17 @@ The C++ bank has a loop — work the group, paste, get graded, misses to ledger.
 
 **Full coverage map — every category has exactly one home block:**
 
-|Block|Day|OS categories|Comp-arch categories|
-|---|---|---|---|
-|OS 1|Aug 8|1, 2, 3|—|
-|OS 2|Aug 10|4, 5, 6, 7|—|
-|CA 1|Aug 11|—|1, 2, 3, 4|
-|OS 3|Aug 12|11, 12, 13, 14|—|
-|CA 2 + bank concurrency group|Aug 13|—|5, 6, 7, 8, 10, 12|
-|OS 4|Aug 14|8, 9, 10, 15|—|
-|Mixed drill|Aug 15|—|9, 11|
-|Mini-diagnostic|Aug 12|tests OS 1–2|—|
-|Mixed drills + sweep|Aug 15, 17, 19|all, misses first|all, misses first|
+| Block                         | Day            | OS categories     | Comp-arch categories |
+| ----------------------------- | -------------- | ----------------- | -------------------- |
+| OS 1                          | Aug 8          | 1, 2, 3           | —                    |
+| OS 2                          | Aug 10         | 4, 5, 6, 7        | —                    |
+| CA 1                          | Aug 11         | —                 | 1, 2, 3, 4           |
+| OS 3                          | Aug 12         | 11, 12, 13, 14    | —                    |
+| CA 2 + bank concurrency group | Aug 13         | —                 | 5, 6, 7, 8, 10, 12   |
+| OS 4                          | Aug 14         | 8, 9, 10, 15      | —                    |
+| Mixed drill                   | Aug 15         | —                 | 9, 11                |
+| Mini-diagnostic               | Aug 12         | tests OS 1–2      | —                    |
+| Mixed drills + sweep          | Aug 15, 17, 19 | all, misses first | all, misses first    |
 
 OS 1–15 and CA 1–12: fully covered, no orphans.
 
