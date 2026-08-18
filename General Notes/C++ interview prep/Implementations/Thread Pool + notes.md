@@ -1,3 +1,5 @@
+- Notes to remember
+	- Remember - all accesses to the queue must be protected by mutex, **including .empty()**
 ```cpp
 // Write your solution here
 // C++23 using GCC 14.2
@@ -89,3 +91,13 @@ private:
     std::vector<std::thread> threads_;
 };
 ```
+
+# CV version
+- cv predicate must also contain the stop checker
+	- The stop checker change in destructor must be protected by a mutex
+		- Once a thread is blocked in cv.wait(), **the only thing that can retrieve it is a notify on that same cv**
+	- If stop checker change is not protected by mutex
+		- Possible that stopped_ is changed (in the destructor) right after worker checks stopped_. In that case, it isn't actually notified, and since destructor has already run, nothing else will notify it ever again.
+- Basically
+	- Every cv.wait() failure causes thread to sleep, and something has to wake it so the function can return and join() can be called.
+	- If that thing is in the predicate itself, make sure its protected by the same mutex

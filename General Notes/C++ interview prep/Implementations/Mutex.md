@@ -1,3 +1,9 @@
+Things to note
+- Copy deleted
+- `flag.exchange(1, ..)`
+	- 1 = locked
+	- exchange return old. if exchange returns 0, it means it wasn't locked, therefore **this thread** is the one that locked it.
+- `flag.load(..)` -> this is purely an optimisation
 ```cpp
 class Mutex {
 public:
@@ -23,9 +29,3 @@ private:
     std::atomic<unsigned int> flag_{ 0 };
 };
 ```
-Things to note
-- Copy deleted
-- `flag.exchange(1, ..)`
-	- 1 = locked
-	- exchange return old. if exchange returns 0, it means it wasn't locked, therefore **this thread** is the one that locked it.
-- `flag.load(..)` -> this is purely an optimisation

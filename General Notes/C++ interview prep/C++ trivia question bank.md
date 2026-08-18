@@ -341,12 +341,20 @@ Explanation for the above
 
 41. What is the difference between a function template and a template function instantiation? When does instantiation happen?
 - Function template is like blueprint for generated machine code, while instantiation is the compiler generating the actual code to be used, and happens when the template is called.
-- 
+- ⚠️ Half credit - things to add
+	- Instantiation happens at the **point of use, compile time**
+	- For class template, onyl the member functions you actually use get templated
+
 41. Explain SFINAE in one paragraph, and show a minimal `enable_if` example gating a function on `is_integral`.
 - SFINAE stands for substitution failure is not an error. Unsure after this.
+- **X** missing or wrong
+- **X** missing or wrong
+	- During template argument deduction, compiler **substitutes** deduced arguments into the **signature**
+	- If that substitution produces an invalid type or expression in the immediate context of the signatrue, the candidate is silently removed from overload set instead of causing compile error
 
 41. What do C++20 concepts replace, and what advantages do they have over SFINAE beyond nicer errors?
 - Replace SFINAE. Unsure beyond this.
+- **COME BACK TO THISSSSSSSSSSSSSSSSSSSSSSSSSSSS**
 
 41. What is CRTP? Write the skeleton and explain how the base can call derived methods without virtual dispatch. What is the cost/benefit vs virtual functions?
 - CRTP stands for curiously recurring template programming.
