@@ -47,53 +47,26 @@ Backlog
 - C++ modern tools, features you've used.. (30 min)
 
 # Aug 19 Wed
+
 - Implementation
-	- Pool allocator (2h)
-- Review everything
-	- All implementation stuff (2h)
-- C++
-	- Compilation deep (15 min)
-- Comp Arch Bank (2h)
-- Posix and linux recap + cheatsheet  (1h)
+	- Pool allocator
+	- Review everything else, especially Map + Orderbook (actually implement them)
+- Recap notes
+	- OS, Comp arch read through
+	- C++
+	- Posix + Linux commands
+	- C++ - compilation
+- Moldcast and Blockgraph 
 
 
 # Aug 20 Thur
 - Behavioural prep
 	- Why squarepoint, resume stuff, etc.
 - Interview day
-  
-  ```cpp
-  struct TimeEntry {
-	  string key;
-	  string value;
-	  int timestamp;
-  };
-  class TimeMap {
-  public:
-	  TimeMap() {};
-	  void set(string key, string value, int timestamp) {
-		  entries[key].emplace_back(key, value, timestamp);
-	  }
-	  
-	  string get(string key, int timestamp) {
-		  auto p = entries.find(key);
-		  if (p == entries.end()) return "";
-		  // largest timestamp <= timestamp.
-		  // timetamp > timestamp, then subtract one
-		  auto& v = p->second;
-		  auto it = std::upper_bound(
-			  v.begin(), 
-			  v.end(),
-			  timestamp,
-			  [&](const auto& timestamp, const auto& elem){
-				  return elem.timestamp > timestamp;
-			  }
-			);
-		  if (it == v.begin()) return "";
-		  return (--it)->value;
-	  }
-  
-  private:
-	  std::unordered_map<std::string, std::vector<TimeEntry>> entries;
-  };
-  ```
+
+# Aug 24
+https://leetcode.com/problems/subarray-sums-divisible-by-k/
+https://claude.ai/chat/a764a66b-7353-41cb-8a10-816b54cf4337
+- CS3210 tutorial 0 notes
+- More leetcode
+- At least 1 implementation question
