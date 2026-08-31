@@ -1,0 +1,2 @@
+- What is the choice I make?
+	- If the choice I make affects the future instead of the past, then iterate from the future to do PULL dp.

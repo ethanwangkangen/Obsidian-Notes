@@ -333,6 +333,17 @@ Reference for the reliable UDP project and HFT interviews. Each item has answer 
 - [ ] **NIC → recvfrom path (conceptual)**
     
     - Packet hits NIC → DMA into a ring buffer → interrupt (or NAPI polling under load) → driver wraps it in an `sk_buff` → IP layer (checksum, routing decision: local) → UDP layer (checksum, demux by dst port) → appended to the socket's receive buffer → blocked reader woken → `recvfrom` copies kernel→user.
+```cpp
+HOST A                          HOST B
+app data                        app data
+   |                               ^
+   v  +TCP hdr          -TCP hdr   |
+   v  +IP hdr           -IP hdr    |
+   v  +Eth hdr/FCS      -Eth hdr   |
+   |                               |
+   +--> switch --> router --> switch --+
+         (L2)      (L3)       (L2)
+```
     - Latency taxes on this path: interrupt handling, scheduler wakeup, kernel/user copy, syscall overhead. This list is your segue to kernel bypass.
 - [ ] **Kernel bypass (discussion-level, not implementation)**
     

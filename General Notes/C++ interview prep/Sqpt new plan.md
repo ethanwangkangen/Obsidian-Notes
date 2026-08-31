@@ -70,3 +70,16 @@ https://claude.ai/chat/a764a66b-7353-41cb-8a10-816b54cf4337
 - CS3210 tutorial 0 notes
 - More leetcode
 - At least 1 implementation question
+
+# Aug 31
+- Networking
+## Sept 1
+- OS / Comp architecture
+- Leetcode - categories, dp + greedy practice, ordered set implemtation stuff
+
+## Sept 2
+
+## Sept 3
+
+## Sept 4 interview day
+- Review resume + touchup
