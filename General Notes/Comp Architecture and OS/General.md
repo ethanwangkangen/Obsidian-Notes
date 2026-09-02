@@ -209,7 +209,8 @@ Each level is one 4 KiB page holding 512 × 8 B entries. An entry at levels 1–
 - **Context switches:** page tables are per-process → loading a new CR3 invalidates the old translations. Either (a) flush the whole TLB (old, expensive: subsequent code re-misses everything), or (b) tag each entry with an **ASID/PCID** so entries from multiple processes coexist and only matching ones are used — the modern default. Switching _threads of the same process_ keeps CR3 → TLB untouched → one reason thread switches are cheaper.
 - **Huge pages (2 MiB / 1 GiB):** the PD (or PDPT) entry directly maps a big page → walk ends a level early, and one TLB entry now covers 512× (or 262,144×) the memory → massive drop in TLB misses for big heaps. Costs: internal fragmentation, harder to swap. `madvise(MADV_HUGEPAGE)` / explicit hugetlbfs. Standard answer to "how do you reduce TLB pressure."
 - **TLB shootdown** (advanced but appears): when the OS changes a mapping (munmap, permission change), other cores may hold the stale entry → kernel sends IPIs (inter-processor interrupts) forcing each core to invalidate → expensive, scales badly with core count. Why frequent mmap/munmap churn is costly in multithreaded processes.
-
+![[Pasted image 20260902235832.png]]
+![[Pasted image 20260902235844.png]]
 ## B4. Page faults
 
 CPU raises a fault when the walk can't complete legally. The OS handler classifies:
@@ -237,17 +238,17 @@ CPU raises a fault when the walk can't complete legally. The OS handler classifi
 - **Processor/CPU/socket:** the physical chip.
 - **Core:** independent execution engine within it — own registers, ALUs, pipeline, L1i/L1d, L2; shares L3 + memory controller with sibling cores. N cores = N instructions streams truly in parallel.
 - **Hardware thread (SMT / hyperthreading):** one core exposes 2 logical CPUs by duplicating _architectural state_ (register file, PC) while **sharing execution units, L1/L2, TLB, branch predictor**. When thread A stalls (cache miss), thread B uses the idle slots → throughput +10–30%, not 2×. Costs: the two threads contend for cache/TLB → jitter, side channels → **HFT typically disables SMT** (or pins one critical thread per physical core).
-- Hierarchy: processor ⊃ cores ⊃ HW threads ← [OS scheduler maps] ← SW threads ⊂ processes.
+- Hierarchy: processor ⊃ cores ⊃ HW threads ← `[OS scheduler maps]` ← SW threads ⊂ processes.
 
 ## C2. Process vs thread (software)
 
-|Resource|Process|Threads in one process|
-|---|---|---|
-|Virtual address space / page table|own|**shared**|
-|Heap, globals, code|own|shared|
-|File descriptors, signal handlers, cwd|own|shared|
-|Registers, PC, stack|own|**own** (each thread its own stack)|
-|errno, TLS|—|own|
+| Resource                               | Process | Threads in one process              |
+| -------------------------------------- | ------- | ----------------------------------- |
+| Virtual address space / page table     | own     | **shared**                          |
+| Heap, globals, code                    | own     | shared                              |
+| File descriptors, signal handlers, cwd | own     | shared                              |
+| Registers, PC, stack                   | own     | **own** (each thread its own stack) |
+| errno, TLS                             | —       | own                                 |
 
 - Process = resource container + isolation boundary. Thread = unit of scheduling/execution.
 - Communication: threads share memory natively (hence need synchronization); processes need **IPC** — pipes, sockets, shared memory (`shm`/`mmap` — fastest, kernel only sets up the mapping), message queues, signals.
@@ -364,7 +365,7 @@ Two independent reordering sources; both must be tamed:
 
 - **Litmus test (Dekker):** `T1: x=1; r1=y;` `T2: y=1; r2=x;` (x=y=0 initially). On x86, **r1==0 && r2==0 is possible** — both stores buffered when the loads execute. Preventing it requires a full fence (`mfence`) or seq_cst atomics.
 - C++ → x86 mapping (why acquire/release is "free" on x86):
-    
+
     |C++ operation|x86 code|
     |---|---|
     |load relaxed/acquire/seq_cst|plain `mov`|
