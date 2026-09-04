@@ -6,15 +6,15 @@
 
 ## A1. Memory hierarchy & the numbers
 
-|Level|Typical size|Latency|Shared?|
-|---|---|---|---|
-|Registers|~16 GP + vector|0 cy|per HW thread|
-|L1i / L1d|32 KiB each|~4 cy|per core|
-|L2|256 KiB – 1 MiB|~12 cy|per core (unified i+d)|
-|L3 (LLC)|8 – 64 MiB|~40 cy|shared across cores (unified)|
-|DRAM|GiBs|~60–100 ns (~200–300 cy)|system|
-|NVMe SSD|—|~10–100 µs||
-|HDD|—|~5–10 ms||
+| Level     | Typical size    | Latency                  | Shared?                       |
+| --------- | --------------- | ------------------------ | ----------------------------- |
+| Registers | ~16 GP + vector | 0 cy                     | per HW thread                 |
+| L1i / L1d | 32 KiB each     | ~4 cy                    | per core                      |
+| L2        | 256 KiB – 1 MiB | ~12 cy                   | per core (unified i+d)        |
+| L3 (LLC)  | 8 – 64 MiB      | ~40 cy                   | shared across cores (unified) |
+| DRAM      | GiBs            | ~60–100 ns (~200–300 cy) | system                        |
+| NVMe SSD  | —               | ~10–100 µs               |                               |
+| HDD       | —               | ~5–10 ms                 |                               |
 
 Derived numbers worth knowing cold:
 
