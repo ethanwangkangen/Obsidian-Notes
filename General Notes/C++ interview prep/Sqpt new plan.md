@@ -95,16 +95,16 @@ Final sprint list:
 	- Shared pointer (1x)
 		- Take note of what release() does
 	- Unique pointer, make_unique (1x)
-	- Vector 
+	- Vector  (1x)
 	- Sorted vector thing
 	- Range module (1x, need recap)
-	- Thread pool recap 
+	- Thread pool recap (1x)
 		- Remember, threads are **move only**
 	- Median from data stream
 		- **Revisit**
 		- Remember to push into one, then pop the top into the other to maintain invariant
 		- Check the sizes between the 2 heaps
-	- Thread safe bounded queue
+	- Thread safe bounded queue (1x)
 	- LRU cache recap (1x)
 	- Sliding window median
 		- **Revisist!**
@@ -182,16 +182,77 @@ Final sprint list:
 
 
 # Sept 10
+- Completed:
+	- Vector
+	- Bounded thread pool
+	- Reading of C++ notes
 
 # Sept 11
+Plan
+- Implementations
+	- Review: pattern cheatsheet
+		- LRU cache (done)
+			- Bugs: capacity check happens whether or not put inserts or makes a new one
+			- Forgot to update value in put()
+		- LFU cache (done)
+			- Bug: inside put(), evict FIRST before putting in
+			- Use map() instead of unordered_map()
+			- Remember how rehashing works for unordered_map
+				- No rehashing in map() since its a tree
+				- Map -> iterators invalidated, but **references still valid**
+		- Interval set
+			- Same pattern, **upper_bound** then **std::prev** for all 3: query, add and remove
+			- Add: >=/<=, Remove: >/<
+			- **Insert does nothing if already exists, DOEST NOT OVERWRITE!**
+				- In remove(), when adding the left and right segments for prev, erase first then insert.
+		- Most Frequent Ids
+			- Simple ordered set
+			- Use std::greater<> to compare a pair
+				- If not, **must ensure that you compare both elements in the pair, not just one**
+				- If not set may falsely make 2 diff pairs equivalent based on one element only
+		- My Calendar II
+			- Sweep line
+			- My solution: order by endpoints, then one pass
+				- Bug: early termination based on starting (which map is NOT sorted by!)
+				- Bug: used map instead of multimap.
+					- Remember, no matter what, **insert never overwrites**
+						- Map, set -> dropped
+						- Multimap, mutliset -> insert new pair
+		- Sliding window median (todo)
+		- Vector emplace back, std algorithm review (todo)
+		- Free List (todo)
+		- Heap + lazy deletion (don't need?)
+		- File system
+		- CRTP
+			- Done
+			- Remember base does all the work, including being templated. Derived just inherits
+- C++ trivia master list read through + quiz myself with AI
 
-# Sept 12
-
+# Sept 12 
+Plan
+- Implementations
+	- Map
+	- Hashmap
+- Concurrency day
+- Std::optional, std::function, std::variant
 # Sept 13
+Plan
+- Implementations
+	- File system
+	- Pool allocator
+	- Allocator on stack, malloc etc
+- OS, CA day
+- 3210 Assignment
 
 # Sept 14
-
+- Leetcode review
+- String stuff
+- Trie
 # Sept 15
+- Resume
+- Behavioural
+- Networking
+- 
 
 # Sept 16 Interview day
 

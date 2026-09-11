@@ -500,7 +500,7 @@ Cover the answer column; say it out loud; check.
 
 **2. What does cv.wait(lk, pred) desugar to, and what two bugs does the loop kill?** `while (!pred()) wait(lk);` where wait atomically unlocks+sleeps and relocks on wake. Kills: spurious wakeups (proceed on false condition) and over-notification (notify_one waking multiple / wrong waiters).
 
-**3. Where exactly does plain `int` counter++ lose updates across two threads?** It's load→inc→store. Both threads load the same value v, both compute v+1, both store v+1 → one increment vanishes. x86's strong ordering orders visible operations; it does not fuse the three into one atomic RMW. atomic<int>++ emits `lock inc` — the lock prefix makes the RMW indivisible.
+**3. Where exactly does plain `int` counter++ lose updates across two threads?** It's load→inc→store. Both threads load the same value v, both compute v+1, both store v+1 → one increment vanishes. x86's strong ordering orders visible operations; it does not fuse the three into one atomic RMW. `atomic<int>++` emits `lock inc` — the lock prefix makes the RMW indivisible.
 
 **4. When does acquire synchronize-with release, and what does it buy for non-atomic data?** When the acquire load reads the value written by the release store (same atomic object). Then writer's pre-release operations happen-before reader's post-acquire operations → reader can access non-atomic data the writer prepared, without a data race.
 
