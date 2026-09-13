@@ -231,18 +231,18 @@ Plan
 # Sept 12 
 Plan
 - Implementations
-	- Map
-	- Hashmap
+	- Map (done)
+	- Hashmap (done)
 - Concurrency day
 - Std::optional, std::function, std::variant
 # Sept 13
 Plan
 - Implementations
-	- File system
+	- File system (done)
 	- Pool allocator
 	- Allocator on stack, malloc etc
 - OS, CA day
-- 3210 Assignment
+
 
 # Sept 14
 - Leetcode review
