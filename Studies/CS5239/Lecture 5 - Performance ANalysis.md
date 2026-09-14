@@ -77,6 +77,8 @@
 # Performance bounds
 - Asymptotic bounds (optimistic and pessimistic)
 - Balanced bounds (when no bottleneck)
+- Note
+	- No bounds for open system, beyond saturaion point, R continues to get worse as load increases
 
 ## Asymptotic bounds
 - Assumption:
